@@ -4,7 +4,6 @@ import java.io.*;
 
 import net.tinyos.packet.*;
 import net.tinyos.util.*;
-import net.tinyos.message.*;
 
 public class Listen {
 	public static void main(String args[]) throws IOException {

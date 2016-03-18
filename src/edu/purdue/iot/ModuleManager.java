@@ -2,47 +2,42 @@ package edu.purdue.iot;
 
 import java.io.*;
 
-public class ModuleManager extends Thread {
+public final class ModuleManager {
 
-	public static void main(String args[]) throws NumberFormatException, IOException {
+	// SINGLETON pattern
+	private static ModuleManager instance = new ModuleManager();
+	private ModuleManager() {}
+	public static ModuleManager getInstance() {
+		if (instance == null) instance = new ModuleManager();
+		return instance;
+	}
 
-		char option = 'A';
+	
+	public void start() {
+		// TODO: finish the readModulesConfig() method and uncomment next line
+		// readModulesConfig();
 
-		FileInputStream configstream = new FileInputStream("/home/odroid/tinyos-main/project/ids/data/config.txt");
-		BufferedReader cr = new BufferedReader(new InputStreamReader(configstream));
-		int n;
+		// for now, we run some hardcoded modules
+		PrintModule p1 = new PrintModule("Thread 1");
+		p1.start();
+	}
 
-		n = Integer.parseInt((cr.readLine())); // get other parameters from config file
-		cr.close();
-
-		switch (option) // currently the implementation supports static switch
-						// cases, but each of the modules will be
-						// implemented as a new runnable thread with a run
-						// method. It is up to the module manager to
-						// decide when and which module has to run.
-		{
-		case 'A': // sample print module which pops out everything from the queues and prints it
-
-			// each module runs in its own separate thread
-
-			PrintModule p1 = new PrintModule("Thread 1");
-			p1.start();
-
-			break;
-		case 'B':
-			System.out.println("\n Module B working \n");
-
-			break;
-		case 'C':
-			System.out.println("\n Module C working \n");
-			break;
-		case 'D':
-			System.out.println("\n Module D working \n");
-		case 'E':
-			System.out.println("\n Module E working \n");
-			break;
-		default:
-			System.out.println("\nInvalid option provided \n");
+	@SuppressWarnings("unused")
+	private void readModulesConfig() {
+		// read from config file which modules to start for now
+		try {
+			FileInputStream configstream = new FileInputStream("data/config.txt");
+			BufferedReader br = new BufferedReader(new InputStreamReader(configstream));
+			String line;
+			while ((line = br.readLine()) != null) {
+				// TODO: use reflection to match the string "ModuleName" with
+				// the class ModuleName and start that module
+			}
+			br.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
+
 }

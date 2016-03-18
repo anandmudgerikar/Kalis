@@ -4,11 +4,22 @@ import java.util.*;
 
 public class DataStore {
 
+	// SINGLETON pattern
+	private static DataStore instance = new DataStore();
+	public static DataStore getInstance() {
+		if (instance == null) instance = new DataStore();
+		return instance;
+	}
+	
+	
 	private Map<Integer, Queue<Packet>> queues;
 	
-	public DataStore() {
+	
+	
+	private DataStore() {
 		this.queues = new HashMap<Integer, Queue<Packet>>(); // initializing the queues
 	}
+	
 
 	public void update_queues() throws IOException {
 
