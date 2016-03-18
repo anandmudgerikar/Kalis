@@ -22,7 +22,6 @@ public class PrintModule implements Runnable {
 			System.out.println("Error in input from data store");
 		}
 
-		int n;
 		try {
 			// printing out all the packet captures for each queue
 			for(Entry<Integer, Queue<String>> q : ds.queues.entrySet()) {
