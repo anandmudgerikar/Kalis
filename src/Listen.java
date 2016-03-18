@@ -6,9 +6,8 @@ import net.tinyos.packet.*;
 import net.tinyos.util.*;
 import net.tinyos.message.*;
 
-
 public class Listen {
-    public static void main(String args[]) throws IOException {
+	public static void main(String args[]) throws IOException {
         String source = null;
         PacketSource reader;
         if (args.length == 2 && args[0].equals("-comm")) {
@@ -57,5 +56,3 @@ public class Listen {
 	}
     }
 }
-
-
