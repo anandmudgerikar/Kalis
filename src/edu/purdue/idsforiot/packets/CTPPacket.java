@@ -1,4 +1,4 @@
-package edu.purdue.iot;
+package edu.purdue.idsforiot.packets;
 
 public class CTPPacket extends Packet {
 
@@ -8,6 +8,10 @@ public class CTPPacket extends Packet {
 	private String seqno;
 	private String collectid;
 
+	public CTPPacket(String raw) {
+		this(Integer.parseInt(raw.substring(30, 32)), raw.substring(33, 35),
+			 raw.substring(8, 16), raw.substring(32, 48), raw.substring(48, 56), raw.substring(56, 64));
+	}
 	public CTPPacket(int nodeid, String data, String thl, String origin, String seqno, String collectid) {
 		super(nodeid, data);
 		this.thl = thl;
@@ -16,11 +20,11 @@ public class CTPPacket extends Packet {
 		this.collectid = collectid;
 	}
 
-	public String getThl() {
+	public String getTHL() {
 		return thl;
 	}
 
-	public void setThl(String thl) {
+	public void setTHL(String thl) {
 		this.thl = thl;
 	}
 
@@ -32,19 +36,19 @@ public class CTPPacket extends Packet {
 		this.origin = origin;
 	}
 
-	public String getSeqno() {
+	public String getSeqNo() {
 		return seqno;
 	}
 
-	public void setSeqno(String seqno) {
+	public void setSeqNo(String seqno) {
 		this.seqno = seqno;
 	}
 
-	public String getCollectid() {
+	public String getCollectID() {
 		return collectid;
 	}
 
-	public void setCollectid(String collectid) {
+	public void setCollectID(String collectid) {
 		this.collectid = collectid;
 	}
 

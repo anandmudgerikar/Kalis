@@ -1,6 +1,9 @@
-package edu.purdue.iot;
+package edu.purdue.idsforiot;
 import java.io.*;
 import java.util.*;
+
+import edu.purdue.idsforiot.packets.CTPPacket;
+import edu.purdue.idsforiot.packets.Packet;
 
 public class DataStore {
 
@@ -17,7 +20,8 @@ public class DataStore {
 	
 	
 	private DataStore() {
-		this.queues = new HashMap<Integer, Queue<Packet>>(); // initializing the queues
+		// initializing the queues
+		this.queues = new HashMap<Integer, Queue<Packet>>();
 	}
 	
 
@@ -39,34 +43,27 @@ public class DataStore {
 				// standard blinkApp packet format
 				System.out.println("Packet is Zigbee");
 				
-				String nodeid = strLine.substring(30, 32);
-				String data = strLine.substring(33, 35);
-				p = new Packet(Integer.parseInt(nodeid), data);
+				p = new Packet(strLine);
 				
 				// add to CVS file
 				bw.write(p.getNodeID());
 				bw.write(",");
 				bw.write(p.getData());
-				// bw.write(",");
+				bw.write(",");
 
-			} else if ((strLine.substring(0, 5)).equals("00 FE")) { // condition for CPT check (currently manually setting value to FE in packet) errorsin decoding.. needs fixing
-				// CPT framework packet format
-				String nodeid = strLine.substring(30, 32);
-				String data = strLine.substring(33, 35);
-				String thl = strLine.substring(8, 16);
-				String origin = strLine.substring(32, 48);
-				String seqno = strLine.substring(48, 56);
-				String collectid = strLine.substring(56, 64);
-				p = new CTPPacket(Integer.parseInt(nodeid), data, thl, origin, seqno, collectid);
+			} else if ((strLine.substring(0, 5)).equals("00 FE")) { // condition for CTP check (currently manually setting value to FE in packet) errors in decoding.. needs fixing
+				System.out.println("Packet is CTP");
+				// CTP framework packet format
+				p = new CTPPacket(strLine);
 
 				// add to CVS file
-				bw.write(thl);
+				bw.write(((CTPPacket)p).getTHL());
 				bw.write(",");
-				bw.write(origin);
+				bw.write(((CTPPacket)p).getOrigin());
 				bw.write(",");
-				bw.write(seqno);
+				bw.write(((CTPPacket)p).getSeqNo());
 				bw.write(",");
-				bw.write(collectid);
+				bw.write(((CTPPacket)p).getCollectID());
 				bw.write(",");
 				
 			} else {
@@ -74,10 +71,7 @@ public class DataStore {
 				continue;
 			}
 
-			// add to appropriate queue
-			if (!queues.containsKey(p.getNodeID()))
-				queues.put(p.getNodeID(), new LinkedList<Packet>());
-			queues.get(p.getNodeID()).add(p);
+			this.onNewPacket(p);
 		}
 
 		// Close the input stream
@@ -86,6 +80,13 @@ public class DataStore {
 
 	}
 
+	
+	public void onNewPacket(Packet p) {
+		// add to appropriate queue
+		if (!queues.containsKey(p.getNodeID()))
+			queues.put(p.getNodeID(), new LinkedList<Packet>());
+		queues.get(p.getNodeID()).add(p);
+	}
 	
 	
 	public Map<Integer, Queue<Packet>> getQueues() {

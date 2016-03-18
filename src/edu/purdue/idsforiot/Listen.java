@@ -1,4 +1,4 @@
-package edu.purdue.iot;
+package edu.purdue.idsforiot;
 
 import java.io.*;
 

@@ -1,4 +1,6 @@
-package edu.purdue.iot;
+package edu.purdue.idsforiot;
+
+import edu.purdue.idsforiot.modules.ModuleManager;
 
 public class IDS {
 

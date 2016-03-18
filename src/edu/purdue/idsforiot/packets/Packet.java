@@ -1,4 +1,4 @@
-package edu.purdue.iot;
+package edu.purdue.idsforiot.packets;
 
 public class Packet {
 
@@ -6,6 +6,9 @@ public class Packet {
 	private int nodeid;
 	private String data;
 
+	public Packet(String raw) {
+		this(Integer.parseInt(raw.substring(30, 32)), raw.substring(33, 35));
+	}
 	public Packet(int nodeid, String data) {
 		this.nodeid = nodeid;
 		this.data = data;
