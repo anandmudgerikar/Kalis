@@ -1,3 +1,4 @@
+package edu.purdue.iot;
 import java.io.*;
 import java.util.Map.Entry;
 import java.util.Queue;
@@ -22,19 +23,11 @@ public class PrintModule implements Runnable {
 			System.out.println("Error in input from data store");
 		}
 
-		try {
-			// printing out all the packet captures for each queue
-			for(Entry<Integer, Queue<String>> q : ds.queues.entrySet()) {
-				if (q.getValue().isEmpty()) {
-					System.out.println("Queue for node " + q.getKey() + " is empty");
-				} else {
-					while (!q.getValue().isEmpty())
-						System.out.println(q.getValue().remove());
-				}
-			}
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// printing out all the packet captures for each queue
+		for(Entry<Integer, Queue<Packet>> q : ds.getQueues().entrySet()) {
+			System.out.println("Queue for node " + q.getKey() + ":");
+			while (!q.getValue().isEmpty())
+				System.out.println(q.getValue().remove());
 		}
 	}
 

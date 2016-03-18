@@ -1,3 +1,4 @@
+package edu.purdue.iot;
 
 import java.io.*;
 
@@ -53,5 +54,8 @@ public class Listen {
 		catch (IOException e) {
 			System.err.println("Error on " + reader.getName() + ": " + e);
 		}
+		
+		fileWriter.close();
+		fileWriter2.close();
 	}
 }
