@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.Map.Entry;
+import java.util.Queue;
 
 public class PrintModule implements Runnable {
 	private Thread t;
@@ -13,40 +15,25 @@ public class PrintModule implements Runnable {
 		System.out.println("Running " + threadName);
 
 		System.out.println("\n Print Module working \n");
-		Data_Store ds = new Data_Store();
+		DataStore ds = new DataStore();
 		try {
 			ds.update_queues();
 		} catch (IOException e) {
 			System.out.println("Error in input from data store");
 		}
 
-		FileInputStream configstream;
 		int n;
 		try {
-			configstream = new FileInputStream("/home/odroid/tinyos-main/project/ids/data/config.txt");
-			BufferedReader cr = new BufferedReader(new InputStreamReader(configstream));
-
-			n = Integer.parseInt((cr.readLine())); // get other parameters from
-													// config file
-			cr.close();
-
 			// printing out all the packet captures for each queue
-			for (int i = 0; i < n; i++) {
-				if (ds.queues[i].isEmpty()) {
-					System.out.println("Queue for node " + i + "is empty");
+			for(Entry<Integer, Queue<String>> q : ds.queues.entrySet()) {
+				if (q.getValue().isEmpty()) {
+					System.out.println("Queue for node " + q.getKey() + " is empty");
 				} else {
-					while (!ds.queues[i].isEmpty())
-						System.out.println(ds.queues[i].remove());
+					while (!q.getValue().isEmpty())
+						System.out.println(q.getValue().remove());
 				}
-
 			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

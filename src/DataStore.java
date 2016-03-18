@@ -1,9 +1,9 @@
 import java.io.*;
 import java.util.*;
 
-public class Data_Store {
+public class DataStore {
 
-	public Queue<String>[] queues;
+	public Map<Integer, Queue<String>> queues;
 
 	public void update_queues() throws IOException {
 
@@ -21,14 +21,10 @@ public class Data_Store {
 		BufferedReader cr = new BufferedReader(new InputStreamReader(configstream));
 		int n;
 
-		n = Integer.parseInt((br.readLine())); // get other parameters from
-												// config file
+		n = Integer.parseInt((br.readLine())); // get other parameters from config file
 		cr.close();
 
-		queues = new Queue[n]; // initializing the queues
-		for (int i = 0; i < n; i++) {
-			queues[i] = new LinkedList<String>();
-		}
+		queues = new HashMap<Integer, Queue<String>>(); // initializing the queues
 
 		// packet structure for BlinkToRadio
 		String strLine;
@@ -62,25 +58,12 @@ public class Data_Store {
 				// bw.write(",");
 
 				// add to appropriate queue
-				queues[Integer.parseInt(node_id)].add(message); // added to
-																// appropriate
-																// queue in data
-																// store
+				Integer nid = Integer.parseInt(node_id);
+				if (!queues.containsKey(nid))
+					queues.put(nid, new LinkedList<String>());
+				queues.get(nid).add(message); // added to appropriate queue in data store
 
-			} else if ((strLine.substring(0, 5)).equals("00 FE")) // condition
-																	// for CPT
-																	// check)
-																	// (currently
-																	// manually
-																	// setting
-																	// value to
-																	// FE in
-																	// packet)
-																	// //errors
-																	// in
-																	// decoding..
-																	// needs
-																	// fixing
+			} else if ((strLine.substring(0, 5)).equals("00 FE")) // condition for CPT check) (currently manually setting value to FE in packet) errorsin decoding.. needs fixing
 			{
 				// CPT framework packet format
 				thl = strLine.substring(8, 16);
