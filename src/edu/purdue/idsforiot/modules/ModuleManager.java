@@ -1,26 +1,36 @@
 package edu.purdue.idsforiot.modules;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.purdue.idsforiot.packets.Packet;
 
 public final class ModuleManager {
 
 	// SINGLETON pattern
 	private static ModuleManager instance = new ModuleManager();
-	private ModuleManager() {}
+	private ModuleManager() {
+		this.modules = new ArrayList<Module>();
+	}
 	public static ModuleManager getInstance() {
 		if (instance == null) instance = new ModuleManager();
 		return instance;
 	}
 
 	
+	private List<Module> modules;
+	
 	public void start() {
 		// TODO: finish the readModulesConfig() method and uncomment next line
 		// readModulesConfig();
 
 		// for now, we run some hardcoded modules
-		PrintModule p1 = new PrintModule("Thread 1");
-		p1.start();
+		PrintModule m = new PrintModule("Thread 1");
+		this.modules.add(m);
+		m.start();
 	}
+	
 
 	@SuppressWarnings("unused")
 	private void readModulesConfig() {
@@ -38,6 +48,13 @@ public final class ModuleManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	
+	public void onNewPacket(Packet p) {
+		// notify all active modules of the new packet
+		for(Module m : this.modules)
+			m.onNewPacket(p);
 	}
 
 }

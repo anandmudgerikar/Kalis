@@ -51,5 +51,14 @@ public class CTPPacket extends Packet {
 	public void setCollectID(String collectid) {
 		this.collectid = collectid;
 	}
+	
+	
+	
+
+	@Override
+	public String toCSV() {
+		return super.toCSV() + "," + this.getTHL() + "," + this.getOrigin() + "," + this.getSeqNo() + "," + this.getCollectID();
+	}
+	
 
 }

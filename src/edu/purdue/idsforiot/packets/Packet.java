@@ -29,6 +29,12 @@ public class Packet {
 	public void setData(String data) {
 		this.data = data;
 	}
+
+	
+	public String toCSV() {
+		return this.getNodeID() + "," + this.getData();
+	}
+	
 	
 	
 	@Override

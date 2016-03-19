@@ -1,94 +1,88 @@
 package edu.purdue.idsforiot;
+
 import java.io.*;
 import java.util.*;
 
-import edu.purdue.idsforiot.packets.CTPPacket;
+import edu.purdue.idsforiot.modules.ModuleManager;
 import edu.purdue.idsforiot.packets.Packet;
+import edu.purdue.idsforiot.packets.PacketFactory;
 
 public class DataStore {
 
 	// SINGLETON pattern
 	private static DataStore instance = new DataStore();
+
 	public static DataStore getInstance() {
-		if (instance == null) instance = new DataStore();
+		if (instance == null)
+			instance = new DataStore();
 		return instance;
 	}
-	
-	
+
 	private Map<Integer, Queue<Packet>> queues;
-	
-	
-	
+
 	private DataStore() {
 		// initializing the queues
 		this.queues = new HashMap<Integer, Queue<Packet>>();
 	}
+
 	
-
-	public void update_queues() throws IOException {
-
-		FileInputStream fstream = new FileInputStream("/home/odroid/tinyos-main/project/ids/data/Rawpacket_capture.txt");
-		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-
-		FileOutputStream fstream2 = new FileOutputStream("/home/odroid/tinyos-main/project/ids/data/CVSpacket_capture.txt");
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fstream2));
-
-
-		String strLine;
-
-		// Read File Line By Line
-		while ((strLine = br.readLine()) != null) {
-			Packet p;
-			if ((strLine.substring(0, 5)).equals("00 FF")) {
-				// standard blinkApp packet format
-				System.out.println("Packet is Zigbee");
-				
-				p = new Packet(strLine);
-				
-				// add to CVS file
-				bw.write(p.getNodeID());
-				bw.write(",");
-				bw.write(p.getData());
-				bw.write(",");
-
-			} else if ((strLine.substring(0, 5)).equals("00 FE")) { // condition for CTP check (currently manually setting value to FE in packet) errors in decoding.. needs fixing
-				System.out.println("Packet is CTP");
-				// CTP framework packet format
-				p = new CTPPacket(strLine);
-
-				// add to CVS file
-				bw.write(((CTPPacket)p).getTHL());
-				bw.write(",");
-				bw.write(((CTPPacket)p).getOrigin());
-				bw.write(",");
-				bw.write(((CTPPacket)p).getSeqNo());
-				bw.write(",");
-				bw.write(((CTPPacket)p).getCollectID());
-				bw.write(",");
-				
-			} else {
-				System.out.println("Unknown Packet Format");
-				continue;
+	public void replayTrace(String tracefilepath) {
+		try {
+			FileInputStream fstream = new FileInputStream(tracefilepath);
+			BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+			String raw;
+			while ((raw = br.readLine()) != null) {
+				// notify but don't log (as we are already reading from a log)
+				// TODO timing must be preserved!! We need to notify only at
+				// the right time according to the packet's timestamp
+				this.onNewPacket(raw.getBytes(), false);
 			}
-
-			this.onNewPacket(p);
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-
-		// Close the input stream
-		br.close();
-		bw.close();
-
 	}
 
-	
-	public void onNewPacket(Packet p) {
+	public void onNewPacket(byte[] raw) {
+		// enable logging by default
+		this.onNewPacket(raw, true);
+	}
+
+	public void onNewPacket(byte[] raw, boolean log) {
+		// decode packet, returning in case of decoding errors
+		Packet p = PacketFactory.getPacket(raw.toString());
+		if (p == null)
+			return;
+
+		if (log) {
+			// log the packet on file (both raw and CSV format)
+			try {
+				File rawfile = new File("data/Rawpacketcapture.txt");
+				OutputStream rawfileWriter = new FileOutputStream(rawfile, true);
+				rawfileWriter.write(raw, 0, 10);
+				rawfileWriter.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				File csvfile = new File("data/CSVpacketcapture.txt");
+				FileOutputStream csvfileWriter = new FileOutputStream(csvfile, true);
+				csvfileWriter.write(p.toCSV().getBytes());
+				csvfileWriter.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		// add to appropriate queue
 		if (!queues.containsKey(p.getNodeID()))
 			queues.put(p.getNodeID(), new LinkedList<Packet>());
 		queues.get(p.getNodeID()).add(p);
+
+		// notify the Modules
+		ModuleManager.getInstance().onNewPacket(p);
 	}
-	
-	
+
 	public Map<Integer, Queue<Packet>> getQueues() {
 		return queues;
 	}
