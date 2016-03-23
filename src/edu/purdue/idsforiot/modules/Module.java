@@ -6,4 +6,6 @@ public interface Module {
 
 	public void onNewPacket(Packet p);
 	
+	public void start();
+	
 }

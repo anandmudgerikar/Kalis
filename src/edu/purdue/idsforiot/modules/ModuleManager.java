@@ -3,6 +3,7 @@ package edu.purdue.idsforiot.modules;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.Class;
 
 import edu.purdue.idsforiot.packets.Packet;
 
@@ -21,19 +22,19 @@ public final class ModuleManager {
 	
 	private List<Module> modules;
 	
-	public void start() {
+	public void start() throws InstantiationException, IllegalAccessException {
 		// TODO: finish the readModulesConfig() method and uncomment next line
-		// readModulesConfig();
+		 readModulesConfig();
 
 		// for now, we run some hardcoded modules
-		PrintModule m = new PrintModule("Thread 1");
-		this.modules.add(m);
-		m.start();
+//		PrintModule m = new PrintModule("Thread 1");
+//		this.modules.add(m);
+//		m.start();
 	}
 	
 
 	@SuppressWarnings("unused")
-	private void readModulesConfig() {
+	private void readModulesConfig() throws InstantiationException, IllegalAccessException {
 		// read from config file which modules to start for now
 		try {
 			FileInputStream configstream = new FileInputStream("data/config.txt");
@@ -42,10 +43,16 @@ public final class ModuleManager {
 			while ((line = br.readLine()) != null) {
 				// TODO: use reflection to match the string "ModuleName" with
 				// the class ModuleName and start that module
+				Module defmodule = (Module) Class.forName(line).newInstance();
+				this.modules.add(defmodule);
+				defmodule.start();
+				
 			}
 			br.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			System.out.println("No such Module exists.");
 			e.printStackTrace();
 		}
 	}

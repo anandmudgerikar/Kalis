@@ -23,9 +23,14 @@ public class IDS {
 		Communicator communicator = new Communicator(source);
 				
 		// start the ModuleManager to load the necessary modules
-		ModuleManager.getInstance().start();
+		try {
+			ModuleManager.getInstance().start();
+		} catch (InstantiationException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		if (tracefile != null) {
+		if (!tracefile.equals(null)) {
 			// replay a trace
 			DataStore.getInstance().replayTrace(tracefile);
 		} else {
