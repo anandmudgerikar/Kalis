@@ -1,1 +1,2 @@
-PrintModule
+edu.purdue.idsforiot.modules.PrintModule
+edu.purdue.idsforiot.modules.OtherPrintModule

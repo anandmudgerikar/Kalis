@@ -17,7 +17,7 @@ public class IDS {
 		}
 
 		// TODO: read possible tracefile from command line argument. For now, it's hardcoded.
-		String tracefile = "/home/odroid/tinyos-main/project/ids/data/Rawpacket_capture.txt";
+		String tracefile = "/home/odroid/tinyos-main/project/ids/data/CVSpacket_capture.txt";
 		
 		// create a Communicator to intercept packets
 		Communicator communicator = new Communicator(source);
@@ -30,12 +30,14 @@ public class IDS {
 			e.printStackTrace();
 		}
 		
-		if (!tracefile.equals(null)) {
-			// replay a trace
-			DataStore.getInstance().replayTrace(tracefile);
-		} else {
+		if (tracefile.equals(null)) {
 			// start listening for live packets
 			communicator.listen();
+			
+		} else {
+			// replay a trace
+			DataStore.getInstance().replayTrace(tracefile);
+			
 		}
 		
 	}

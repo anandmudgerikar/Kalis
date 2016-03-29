@@ -5,6 +5,7 @@ public class Packet {
 	// packet structure for BlinkToRadio
 	private int nodeid;
 	private String data;
+	private long timestamp;
 
 	public Packet(String raw) {
 		this(Integer.parseInt(raw.substring(30, 32)), raw.substring(33, 35));
@@ -28,6 +29,14 @@ public class Packet {
 
 	public void setData(String data) {
 		this.data = data;
+	}
+	
+	public long getTimeStamp() {
+		return timestamp;
+	}
+
+	public void setTimeStamp(long timestamp ) {
+		this.timestamp = timestamp;
 	}
 
 	
