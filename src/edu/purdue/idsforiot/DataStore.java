@@ -30,14 +30,15 @@ public class DataStore {
 	
 	public void replayTrace(String tracefilepath) {
 		try {
-			FileInputStream fstream = new FileInputStream(tracefilepath);
-			BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+			//FileInputStream fstream = new FileInputStream(tracefilepath);
+			BufferedReader br = new BufferedReader(new FileReader(tracefilepath));
 			String raw;
 			while ((raw = br.readLine()) != null) {
 				// notify but don't log (as we are already reading from a log)
 				// TODO timing must be preserved!! We need to notify only at
 				// the right time according to the packet's timestamp
-				this.onNewPacket(raw.getBytes(), false, true);
+				String[] packet_components = raw.split(",");
+				this.onNewPacket(packet_components, false, true);
 			}
 			br.close();
 		} catch (IOException e) {
@@ -61,10 +62,31 @@ public class DataStore {
 		{
 			java.util.Date date= new java.util.Date();
 			long curr_timestamp = (new Timestamp(date.getTime())).getTime();
-			p.setTimeStamp(curr_timestamp);
-					
-			 
-			
+			p.setTimeStamp(curr_timestamp);			
+		}
+				
+		// add to appropriate queue
+		if (!queues.containsKey(p.getNodeID()))
+			queues.put(p.getNodeID(), new LinkedList<Packet>());
+		queues.get(p.getNodeID()).add(p);
+
+		// notify the Modules
+		ModuleManager.getInstance().onNewPacket(p);
+	}
+
+	// if packet is recevied from a cvs file
+	public void onNewPacket(String[] raw, boolean log, boolean trace) {
+		// decode packet, returning in case of decoding errors
+		Packet p = PacketFactory.getPacket(raw.toString());
+		if (p == null)
+			return;
+		
+		//if it is a tracefile, set the appropriate timestamps
+		if(trace)
+		{
+			java.util.Date date= new java.util.Date();
+			long curr_timestamp = (new Timestamp(date.getTime())).getTime();
+			p.setTimeStamp(curr_timestamp);		
 		}
 
 		if (log) {
@@ -98,7 +120,7 @@ public class DataStore {
 		// notify the Modules
 		ModuleManager.getInstance().onNewPacket(p);
 	}
-
+	
 	public Map<Integer, Queue<Packet>> getQueues() {
 		return queues;
 	}

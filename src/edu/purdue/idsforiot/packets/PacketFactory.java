@@ -21,5 +21,15 @@ public class PacketFactory {
 		
 		return p;
 	}
+	
+	public static Packet getPacket(String[] raw)
+	{
+		Packet p = null;
+		
+		p.setNodeID(Integer.parseInt(raw[0]));
+		p.setData(raw[1]);
+		
+		return p;
+	}
 
 }
