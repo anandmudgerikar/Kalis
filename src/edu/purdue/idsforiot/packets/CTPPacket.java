@@ -13,7 +13,7 @@ public class CTPPacket extends Packet {
 			 raw.substring(8, 16), raw.substring(32, 48), raw.substring(48, 56), raw.substring(56, 64));
 	}
 	public CTPPacket(int nodeid, String data, String thl, String origin, String seqno, String collectid) {
-		super(nodeid, data);
+		super(nodeid, data,0);
 		this.thl = thl;
 		this.origin = origin;
 		this.seqno = seqno;

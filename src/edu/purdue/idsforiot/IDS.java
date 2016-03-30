@@ -10,14 +10,19 @@ public class IDS {
 		String source = null;
 		if (args.length == 2 && args[0].equals("-comm")) {
 			source = args[1];
-		} else if (args.length > 0) {
-			System.err.println("usage: java edu.purdue.idsforiot.IDS [-comm PACKETSOURCE]");
+		} 
+		else if (args.length > 0) {
+			System.err.println("usage: java edu.purdue.idsforiot.IDS [-comm PACKETSOURCE] [-t Tracefile]");
 			System.err.println("       (default packet source from MOTECOM environment variable)");
 			System.exit(2);
 		}
-
+		
+		String tracefile;
 		// TODO: read possible tracefile from command line argument. For now, it's hardcoded.
-		String tracefile = "/home/odroid/tinyos-main/project/ids/data/CVSpacket_capture.txt";
+		if(args.length == 2 && args[0].equals("-t"))
+			tracefile = args[1];	
+		else	
+			tracefile = "/home/odroid/tinyos-main/project/ids/data/CVSpacket_capture.txt";
 		
 		// create a Communicator to intercept packets
 		Communicator communicator = new Communicator(source);

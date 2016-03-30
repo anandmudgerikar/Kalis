@@ -8,11 +8,12 @@ public class Packet {
 	private long timestamp;
 
 	public Packet(String raw) {
-		this(Integer.parseInt(raw.substring(30, 32)), raw.substring(33, 35));
+		this(Integer.parseInt(raw.substring(30, 32)), raw.substring(33, 35),0); //timestamp is set to appropriate value during logging of data
 	}
-	public Packet(int nodeid, String data) {
+	public Packet(int nodeid, String data, long timestamp) {
 		this.nodeid = nodeid;
 		this.data = data;
+		this.timestamp = timestamp;
 	}
 
 	public int getNodeID() {
@@ -41,7 +42,7 @@ public class Packet {
 
 	
 	public String toCSV() {
-		return this.getNodeID() + "," + this.getData();
+		return this.getNodeID() + "," + this.getData() + "," + this.getTimeStamp();
 	}
 	
 	

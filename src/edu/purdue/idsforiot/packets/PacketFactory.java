@@ -24,11 +24,7 @@ public class PacketFactory {
 	
 	public static Packet getPacket(String[] raw)
 	{
-		Packet p = null;
-		
-		p.setNodeID(Integer.parseInt(raw[0]));
-		p.setData(raw[1]);
-		
+		Packet p = new Packet(Integer.parseInt(raw[0]),raw[1],Long.parseLong(raw[2]));
 		return p;
 	}
 

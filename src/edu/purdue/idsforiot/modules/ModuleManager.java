@@ -43,7 +43,7 @@ public final class ModuleManager {
 			while ((line = br.readLine()) != null) {
 				// TODO: use reflection to match the string "ModuleName" with
 				// the class ModuleName and start that module
-				Module defmodule = (Module) Class.forName(line).newInstance();
+				Module defmodule = (Module) Class.forName("edu.purdue.idsforiot.modules."+line).newInstance();
 				this.modules.add(defmodule);
 				defmodule.start();
 				
