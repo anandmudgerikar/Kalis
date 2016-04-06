@@ -73,8 +73,8 @@ public class DataStore {
 	}
 
 
-	public Map<Integer, Queue<Packet>> getQueues() {
-		return queues;
+	public Queue<Packet> getQueue(Integer nodeID) {
+		return queues.get(nodeID);
 	}
 
 	
