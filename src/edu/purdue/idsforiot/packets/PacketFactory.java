@@ -13,18 +13,19 @@ public class PacketFactory {
 			System.out.println("Packet is CTP");
 			// CTP framework packet format
 			p = new CTPPacket(raw);
-			
+
 		} else {
 			System.out.println("Unknown Packet Format");
 			// TODO: should we throw and exception?
 		}
-		
+
 		return p;
 	}
-	
-	public static Packet getPacket(String[] raw)
-	{
-		Packet p = new Packet(Integer.parseInt(raw[0]),raw[1],Long.parseLong(raw[2]));
+
+	public static Packet getPacket(String[] raw) {
+		// TODO: here we should also distinguish plain packets from CTP packets
+		// TODO: maybe in the CSV format we should add a field at the beginning that says which type of packet it is (0 for plain, 1 for CTP, 2 for WiFi, ...)
+		Packet p = new Packet(Integer.parseInt(raw[0]), raw[1], Long.parseLong(raw[2]));
 		return p;
 	}
 

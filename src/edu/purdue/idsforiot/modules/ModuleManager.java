@@ -33,7 +33,6 @@ public final class ModuleManager {
 	}
 	
 
-	@SuppressWarnings("unused")
 	private void readModulesConfig() throws InstantiationException, IllegalAccessException {
 		// read from config file which modules to start for now
 		try {

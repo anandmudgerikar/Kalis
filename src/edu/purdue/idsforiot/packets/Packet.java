@@ -1,14 +1,17 @@
 package edu.purdue.idsforiot.packets;
 
+import java.sql.Timestamp;
+
 public class Packet {
 
-	// packet structure for BlinkToRadio
 	private int nodeid;
 	private String data;
 	private long timestamp;
 
 	public Packet(String raw) {
-		this(Integer.parseInt(raw.substring(30, 32)), raw.substring(33, 35),0); //timestamp is set to appropriate value during logging of data
+		this(Integer.parseInt(raw.substring(30, 32)),
+			 raw.substring(33, 35),
+			 new Timestamp(new java.util.Date().getTime()).getTime());
 	}
 	public Packet(int nodeid, String data, long timestamp) {
 		this.nodeid = nodeid;

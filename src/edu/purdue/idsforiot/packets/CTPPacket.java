@@ -1,5 +1,7 @@
 package edu.purdue.idsforiot.packets;
 
+import java.sql.Timestamp;
+
 public class CTPPacket extends Packet {
 
 	// packet structure for CPT
@@ -9,11 +11,11 @@ public class CTPPacket extends Packet {
 	private String collectid;
 
 	public CTPPacket(String raw) {
-		this(Integer.parseInt(raw.substring(30, 32)), raw.substring(33, 35),
+		this(Integer.parseInt(raw.substring(30, 32)), raw.substring(33, 35), new Timestamp(new java.util.Date().getTime()).getTime(),
 			 raw.substring(8, 16), raw.substring(32, 48), raw.substring(48, 56), raw.substring(56, 64));
 	}
-	public CTPPacket(int nodeid, String data, String thl, String origin, String seqno, String collectid) {
-		super(nodeid, data,0);
+	public CTPPacket(int nodeid, String data, long timestamp, String thl, String origin, String seqno, String collectid) {
+		super(nodeid, data, timestamp);
 		this.thl = thl;
 		this.origin = origin;
 		this.seqno = seqno;
