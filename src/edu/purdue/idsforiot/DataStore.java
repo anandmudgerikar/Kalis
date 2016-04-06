@@ -33,11 +33,20 @@ public class DataStore {
 			//FileInputStream fstream = new FileInputStream(tracefilepath);
 			BufferedReader br = new BufferedReader(new FileReader(tracefilepath));
 			String raw;
+			long prev_timestamp=0;
+			
 			while ((raw = br.readLine()) != null) {
 				// notify but don't log (as we are already reading from a log)
 				// TODO timing must be preserved!! We need to notify only at
 				// the right time according to the packet's timestamp
 				String[] packet_components = raw.split(",");
+				long time_diff = Long.parseLong(packet_components[2]) - prev_timestamp;
+				prev_timestamp = Long.parseLong(packet_components[2]);          //this will be different for different packet structures eg: blind and ctp
+				try {
+				    Thread.sleep(time_diff); //sleeping for appropriate time
+				} catch(InterruptedException ex) {
+				    Thread.currentThread().interrupt();
+				}
 				this.onNewPacket(packet_components, false);
 			}
 			br.close();
