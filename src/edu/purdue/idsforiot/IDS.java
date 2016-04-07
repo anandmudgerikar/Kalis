@@ -29,10 +29,11 @@ public class IDS {
 		
 		if (tracefile.equals(null)) {
 			// create a Communicator to intercept packets
-			Communicator communicator = new Communicator(source);
+			//Communicator communicator = new Communicator(source);
+			Communicator2 communicator = new Communicator2(source);
 			
 			// start listening for live packets
-			communicator.listen();
+			//communicator.listen(source);
 		} else {
 			// replay a trace
 			DataStore.getInstance().replayTrace(tracefile);
