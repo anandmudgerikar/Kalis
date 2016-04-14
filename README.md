@@ -4,9 +4,8 @@
 
 Immediate items to do:
 
-* Time correctly the notification of packets when replaying a trace.
-* Capture all overheard traffic in ZigBee, switching from Receive to Snoop (we assume that the IDS is not part of the monitored network).
-* Install WiFi card
+* Format from sensor to Java: SrcAddr DstAddr MpduLinkQuality RSSI? PayloadLen Payload
+* Decode intercepted packets on the Java side
 * Intercept all WiFi traffic (for now, capture source IP, dest IP, data even if encrypted)
 
 
@@ -31,3 +30,6 @@ Done:
 * The DataStore.onNewPacket() method for CSV packets also logs to a CSV file, which does not make sense.
 * In the Main, the "tracefile" must be specifiable by command line arguments.
 * Switch from the "Listen" thing to the PrintF primitive in TinyOS to send text over serial to the listening Java application. We need to send data from the application layer (when receiving generic non-CTP packets) and from inside CtpForwardingEngine (when receiving CTP packets).
+* Time correctly the notification of packets when replaying a trace.
+* Capture all overheard traffic in ZigBee, switching from Receive to Snoop (we assume that the IDS is not part of the monitored network).
+* Install WiFi card
