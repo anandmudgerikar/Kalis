@@ -6,6 +6,7 @@ import java.util.*;
 import edu.purdue.idsforiot.modules.ModuleManager;
 import edu.purdue.idsforiot.packets.Packet;
 import edu.purdue.idsforiot.packets.PacketFactory;
+import edu.purdue.idsforiot.packets.WifiPacket;
 
 public class DataStore {
 
@@ -53,7 +54,7 @@ public class DataStore {
         }
     }
 
-    
+    //for sensor traffic
     public void onNewPacket(Packet p) {
         // enable logging by default
         this.onNewPacket(p, true);
@@ -78,7 +79,27 @@ public class DataStore {
         // notify the Modules
         ModuleManager.getInstance().onNewPacket(p);
     }
-
+    
+    //for wifi traffic
+    public void onNewPacket(WifiPacket p) {
+        // enable logging by default
+        this.onNewPacket(p, true);
+    }
+    public void onNewPacket(WifiPacket p, boolean log) {
+        if (log) {
+            try {
+                // log the packet on file (in CSV format)
+                FileOutputStream csvfileWriter = new FileOutputStream(new File("data/CSVpacketcapture.txt"), true);
+                csvfileWriter.write(p.toCSV().getBytes()); 
+                csvfileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+                              
+        // notify the Modules
+        ModuleManager.getInstance().onNewPacket(p);
+    }
 
     public Queue<Packet> getQueue(Integer nodeID) {
         return queues.get(nodeID);

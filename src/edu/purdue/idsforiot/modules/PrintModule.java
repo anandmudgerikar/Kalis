@@ -1,6 +1,8 @@
 package edu.purdue.idsforiot.modules;
 
 import edu.purdue.idsforiot.packets.Packet;
+import edu.purdue.idsforiot.packets.WifiPacket;
+
 
 public class PrintModule implements Module, Runnable {
 	private Thread t;
@@ -25,6 +27,10 @@ public class PrintModule implements Module, Runnable {
 
 	@Override
 	public void onNewPacket(Packet p) {
+		System.out.println(p);
+	}
+	
+	public void onNewPacket(WifiPacket p) {
 		System.out.println(p);
 	}
 }

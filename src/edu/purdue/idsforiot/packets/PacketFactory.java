@@ -28,5 +28,20 @@ public class PacketFactory {
 		Packet p = new Packet(Integer.parseInt(raw[0]), raw[1], Long.parseLong(raw[2]));
 		return p;
 	}
+	
+	public static WifiPacket getpacket(String raw)
+	{
+		WifiPacket p = new WifiPacket();
+		
+		String packet_components[] = raw.split(" ");
+		//java.sql.Timestamp ts = java.sql.Timestamp.valueOf(packet_components[0]);
+		
+		//System.out.println(packet_components[0] + packet_components[2] + packet_components[4] );
+		p.setTimeStamp(packet_components[0]);
+		p.setSourceIp(packet_components[2]);
+		p.setDestIP(packet_components[4]);
+		
+		return p;
+	}
 
 }

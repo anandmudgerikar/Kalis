@@ -6,6 +6,7 @@ import java.util.List;
 import java.lang.Class;
 
 import edu.purdue.idsforiot.packets.Packet;
+import edu.purdue.idsforiot.packets.WifiPacket;
 
 public final class ModuleManager {
 
@@ -49,6 +50,12 @@ public final class ModuleManager {
 
 	
 	public void onNewPacket(Packet p) {
+		// notify all active modules of the new packet
+		for (Module m : this.modules)
+			m.onNewPacket(p);
+	}
+	
+	public void onNewPacket(WifiPacket p) {
 		// notify all active modules of the new packet
 		for (Module m : this.modules)
 			m.onNewPacket(p);
