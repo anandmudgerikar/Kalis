@@ -4,9 +4,10 @@
 
 Immediate items to do:
 
-* Format from sensor to Java: SrcAddr DstAddr MpduLinkQuality RSSI? PayloadLen Payload
-* Decode intercepted packets on the Java side
-* Intercept all WiFi traffic (for now, capture source IP, dest IP, data even if encrypted)
+* Design Environment Sensing as a different kind of Module
+* Add Network Profiling module for traffic load, stats, ...
+* Add Enum with all packet types
+* Add first field in CSV format to store type of packet
 
 
 Daniele's to-do items (for now):
@@ -22,6 +23,7 @@ To-do items for next iteration:
 * Implement a couple more Modules for different attacks (Wifi vs ZigBee, ...).
 
 
+
 Done:
 * Remove need for full package name in initial config file and simply add that string in front when you are about to use Reflection to load the module class.
 * PacketFactory.getPacket(String[] raw) does not call any Packet constructor! (And actually would always generate an error at the moment...).
@@ -33,3 +35,6 @@ Done:
 * Time correctly the notification of packets when replaying a trace.
 * Capture all overheard traffic in ZigBee, switching from Receive to Snoop (we assume that the IDS is not part of the monitored network).
 * Install WiFi card
+* Format from sensor to Java: SrcAddr DstAddr MpduLinkQuality RSSI? PayloadLen Payload
+* Decode intercepted packets on the Java side
+* Intercept all WiFi traffic (for now, capture source IP, dest IP, data even if encrypted)
