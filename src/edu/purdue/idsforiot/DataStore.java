@@ -5,6 +5,7 @@ import java.util.*;
 
 import edu.purdue.idsforiot.modules.ModuleManager;
 import edu.purdue.idsforiot.packets.Packet;
+import edu.purdue.idsforiot.packets.CTPPacket;
 import edu.purdue.idsforiot.packets.PacketFactory;
 import edu.purdue.idsforiot.packets.WifiPacket;
 
@@ -89,7 +90,7 @@ public class DataStore {
         if (log) {
             try {
                 // log the packet on file (in CSV format)
-                FileOutputStream csvfileWriter = new FileOutputStream(new File("data/CSVpacketcapture.txt"), true);
+                FileOutputStream csvfileWriter = new FileOutputStream(new File("data/Wifipacketcapture.txt"), true);
                 csvfileWriter.write(p.toCSV().getBytes()); 
                 csvfileWriter.close();
             } catch (IOException e) {
@@ -97,6 +98,32 @@ public class DataStore {
             }
         }
                               
+        // notify the Modules
+        ModuleManager.getInstance().onNewPacket(p);
+    }
+    
+  //for CTP sensor traffic
+    public void onNewPacket(CTPPacket p) {
+        // enable logging by default
+        this.onNewPacket(p, true);
+    }
+    public void onNewPacket(CTPPacket p, boolean log) {
+        if (log) {
+            try {
+                // log the packet on file (in CSV format)
+                FileOutputStream csvfileWriter = new FileOutputStream(new File("data/CSVpacketcapture.txt"), true);
+                csvfileWriter.write(p.toCSV().getBytes()); 
+                csvfileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+                        
+        // add to appropriate queue
+        if (!queues.containsKey(p.getNodeID()))
+            queues.put(p.getNodeID(), new LinkedList<Packet>());
+        queues.get(p.getNodeID()).add(p);
+        
         // notify the Modules
         ModuleManager.getInstance().onNewPacket(p);
     }

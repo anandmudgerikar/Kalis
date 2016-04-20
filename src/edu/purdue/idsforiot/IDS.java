@@ -4,7 +4,7 @@ import edu.purdue.idsforiot.modules.ModuleManager;
 
 public class IDS {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
 		// parse the command line args
 		String source = null;
@@ -29,8 +29,8 @@ public class IDS {
 		
 		if (tracefile.equals(null)) {
 			// create a Communicator to intercept packets
-			Communicator communicator = new Communicator(source);
-			//Communicator2 communicator = new Communicator2(source);
+			//Communicator communicator = new Communicator(source);
+			Communicator2 communicator = new Communicator2(source);
 			
 			// start listening for live packets
 			communicator.listen();

@@ -12,7 +12,7 @@ public class PacketFactory {
 		} else if ((raw.substring(0, 5)).equals("00 FE")) { // condition for CTP check (currently manually setting value to FE in packet) errors in decoding.. needs fixing
 			System.out.println("Packet is CTP");
 			// CTP framework packet format
-			p = new CTPPacket(raw);
+			//p = new CTPPacket(raw);
 
 		} else {
 			System.out.println("Unknown Packet Format");
@@ -22,10 +22,10 @@ public class PacketFactory {
 		return p;
 	}
 
-	public static Packet getPacket(String[] raw) {
+	public static CTPPacket getPacket(String[] raw) {
 		// TODO: here we should also distinguish plain packets from CTP packets
 		// TODO: maybe in the CSV format we should add a field at the beginning that says which type of packet it is (0 for plain, 1 for CTP, 2 for WiFi, ...)
-		Packet p = new Packet(Integer.parseInt(raw[0]), raw[1], Long.parseLong(raw[2]));
+		CTPPacket p = new CTPPacket(raw[0],raw[2],raw[5],raw[12], raw[11].split(" "));
 		return p;
 	}
 	

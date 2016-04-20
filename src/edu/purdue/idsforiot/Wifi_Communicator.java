@@ -14,7 +14,7 @@ public class Wifi_Communicator{
 	private InputStream tcpInput;
 	private boolean keepRunning = true;
 	
-	public void listen(String[] args)
+	public void listen()
 	{
 		System.out.println("Starting TCPdump");
 		try {
