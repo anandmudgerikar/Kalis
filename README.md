@@ -5,13 +5,13 @@
 Immediate items to do:
 
 * Make sure that we can listen to REAL-TIME, UNLIMITED AMOUNTS of WiFi traffic
-* Design Environment Sensing as a different kind of Module
-* Add Network Profiling module for traffic load, stats, ...
-
+* Check all the TODOs in the Java code and in the TelosB code and get them all done
 
 
 Daniele's to-do items (for now):
 
+* Design Environment Sensing as a different kind of Module
+* Add Network Profiling module for traffic load, stats, ...
 * Figure out SoC for DataStore and Modules wrt queues
 * Implement a SelectiveForwarding module.
 * Have each module expose its characteristics statically (for now, e.g., "IsForMultihop" and "IsForSinglehop" could be static bool properties). The KnowledgeBase component then should be able to iterate over all modules in the edu.purdue.idsforiot.modules package and select only those that have the right characteristics for the current environment.
@@ -25,6 +25,7 @@ To-do items for next iteration:
 
 
 Done:
+
 * Remove need for full package name in initial config file and simply add that string in front when you are about to use Reflection to load the module class.
 * PacketFactory.getPacket(String[] raw) does not call any Packet constructor! (And actually would always generate an error at the moment...).
 * The DataStore.onNewPacket() methods have a lot of duplicated code!

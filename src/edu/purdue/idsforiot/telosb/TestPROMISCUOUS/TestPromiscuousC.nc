@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2008, Technische Universitaet Berlin
  * All rights reserved.
  *
@@ -36,42 +36,43 @@
 #include "printf.h"
 #include "TKN154.h"
 
-module TestPromiscuousC
-{
-  uses {
-    interface Boot;
-    interface MLME_RESET;
-    interface MLME_SET;
-    interface MLME_GET;
-    interface MCPS_DATA;
-    interface Leds;
-    interface IEEE154Frame as Frame;
-    interface IEEE154BeaconFrame as BeaconFrame;
-    interface SplitControl as PromiscuousMode;
-  }
+ module TestPromiscuousC
+ {
+    uses {
+        interface Boot;
+        interface MLME_RESET;
+        interface MLME_SET;
+        interface MLME_GET;
+        interface MCPS_DATA;
+        interface Leds;
+        interface IEEE154Frame as Frame;
+        interface IEEE154BeaconFrame as BeaconFrame;
+        interface SplitControl as PromiscuousMode;
+    }
 } implementation {
 
-  const char *m_frametype[] = {"Beacon", "Data","Acknowledgement","MAC command", "Unknown"};
-  const char *m_cmdframetype[] = {"unknown command", "Association request","Association response",
-    "Disassociation notification","Data request","PAN ID conflict notification",
-    "Orphan notification", "Beacon request", "Coordinator realignment", "GTS request"};
+    const char *m_frametype[] = {"Beacon", "Data", "Acknowledgement", "MAC command", "Unknown"};
+    const char *m_cmdframetype[] = {"unknown command", "Association request", "Association response",
+    "Disassociation notification", "Data request", "PAN ID conflict notification",
+    "Orphan notification", "Beacon request", "Coordinator realignment", "GTS request"
+};
 
-  enum {
+enum {
     RADIO_CHANNEL = 26,
-  };
+};
 
-  event void Boot.booted() {
+event void Boot.booted() {
     call MLME_RESET.request(TRUE);
-  }
+}
 
-  event void MLME_RESET.confirm(ieee154_status_t status)
-  {
+event void MLME_RESET.confirm(ieee154_status_t status)
+{
     call MLME_SET.phyCurrentChannel(RADIO_CHANNEL);
     call PromiscuousMode.start();
-  }
+}
 
-  event message_t* MCPS_DATA.indication (message_t* frame)
-  {
+event message_t* MCPS_DATA.indication (message_t* frame)
+{
     uint8_t i;
     uint8_t *payload = call Frame.getPayload(frame);
     uint8_t payloadLen = call Frame.getPayloadLength(frame);
@@ -80,84 +81,91 @@ module TestPromiscuousC
     uint8_t SrcAddrMode, DstAddrMode;
     uint8_t frameType, cmdFrameType;
     ieee154_address_t SrcAddress, DstAddress;
-    uint16_t SrcPANId=0, DstPANId=0;
+    uint16_t SrcPANId = 0, DstPANId = 0;
 
-    if (call Frame.hasStandardCompliantHeader(frame)){
-      frameType = call Frame.getFrameType(frame);
-      if (frameType > FRAMETYPE_CMD)
-        frameType = 4;
-      call Frame.getSrcPANId(frame, &SrcPANId);
-      call Frame.getDstPANId(frame, &DstPANId);
-      call Frame.getSrcAddr(frame, &SrcAddress);
-      call Frame.getDstAddr(frame, &DstAddress);
-      SrcAddrMode = call Frame.getSrcAddrMode(frame);
-      DstAddrMode = call Frame.getDstAddrMode(frame);
+    if (call Frame.hasStandardCompliantHeader(frame)) {
+        frameType = call Frame.getFrameType(frame);
+        if (frameType > FRAMETYPE_CMD)
+            frameType = 4;
+        call Frame.getSrcPANId(frame, &SrcPANId);
+        call Frame.getDstPANId(frame, &DstPANId);
+        call Frame.getSrcAddr(frame, &SrcAddress);
+        call Frame.getDstAddr(frame, &DstAddress);
+        SrcAddrMode = call Frame.getSrcAddrMode(frame);
+        DstAddrMode = call Frame.getDstAddrMode(frame);
 
-      //printf("\n");
-      printf("%s,", m_frametype[frameType]);
-      if (frameType == FRAMETYPE_CMD){
-        cmdFrameType = payload[0];
-        if (cmdFrameType > 9)
-          cmdFrameType = 0;
-        printf("%s,", m_cmdframetype[cmdFrameType]);
-      }
-      //printf("\n");
-      printf("%d,", SrcAddrMode);
-      //printf("SrcAddr: ");
-      if (SrcAddrMode == ADDR_MODE_SHORT_ADDRESS){
-        printf("0x%02X,", SrcAddress.shortAddress);
-        printf("0x%02X,", SrcPANId);
-      } else if (SrcAddrMode == ADDR_MODE_EXTENDED_ADDRESS){
-        for (i=0; i<8; i++)
-          printf("0x%02X ", ((uint8_t*) &(SrcAddress.extendedAddress))[i]);
+        // TODO: specify the format here as documentation: e.g. frametype, src, dst, ...
+        // TODO: also, the format must be fixed: there are a bunch of printf() inside IF statements that might skip them... how do we decode that?
+        printf("%s,", m_frametype[frameType]);
+        if (frameType == FRAMETYPE_CMD) {
+            cmdFrameType = payload[0];
+            if (cmdFrameType > 9)
+                cmdFrameType = 0;
+            printf("%s,", m_cmdframetype[cmdFrameType]);
+        }
+
+        printf("%d,", SrcAddrMode);
+            //printf("SrcAddr: ");
+        if (SrcAddrMode == ADDR_MODE_SHORT_ADDRESS) {
+            printf("0x%02X,", SrcAddress.shortAddress);
+            printf("0x%02X,", SrcPANId);
+        } else if (SrcAddrMode == ADDR_MODE_EXTENDED_ADDRESS) {
+            for (i = 0; i < 8; i++)
+                printf("0x%02X ", ((uint8_t*) & (SrcAddress.extendedAddress))[i]);
+            printf(",");
+            printf("0x%02X,", SrcPANId);
+        } else {
+            printf("Strange Address,");
+            printf("0x0,"); // placeholder for PanID (to avoid skipping the field, see TODO above)
+        }
+        printf("%d,", DstAddrMode);
+            //printf("DstAddr: ");
+        if ( DstAddrMode == ADDR_MODE_SHORT_ADDRESS) {
+            printf("0x%02X,", DstAddress.shortAddress);
+            printf("0x%02X,", DstPANId);
+        } else if  ( DstAddrMode == ADDR_MODE_EXTENDED_ADDRESS) {
+            for (i = 0; i < 8; i++)
+                printf("0x%02X ", ((uint8_t*) & (DstAddress.extendedAddress))[i]);
+            printf(",");
+            printf("0x%02X,", DstPANId);
+        } else {
+            printf("Strange Address,");
+            printf("0x0,"); // placeholder for PanID (to avoid skipping the field, see TODO above)
+        }
+
+        printf("%d,", call Frame.getDSN(frame));
+        printf("%d,", headerLen);
+            //printf("MHR: ");
+        for (i = 0; i < headerLen; i++) {
+            printf("0x%02X ", header[i]);
+        }
         printf(",");
-        printf("0x%02X,", SrcPANId);
-      } else 
-	printf("Strange Address,");
-      printf("%d,", DstAddrMode);
-      //printf("DstAddr: ");
-      if ( DstAddrMode == ADDR_MODE_SHORT_ADDRESS){
-        printf("0x%02X,", DstAddress.shortAddress);
-        printf("0x%02X,", DstPANId);
-      } else if  ( DstAddrMode == ADDR_MODE_EXTENDED_ADDRESS) {
-        for (i=0; i<8; i++)
-          printf("0x%02X ", ((uint8_t*) &(DstAddress.extendedAddress))[i]);
-        printf(",");    
-        printf("0x%02X,", DstPANId);
-      } else printf(",");
+        printf("%d,", payloadLen);
+            //printf("Payload: ");
+        for (i = 0; i < payloadLen; i++) {
+            printf("0x%02X ", payload[i]);
+        }
+        printf(",");
+        printf("%d", call Frame.getLinkQuality(frame));
 
-      printf("%d,", call Frame.getDSN(frame));
-      printf("%d,", headerLen);
-      //printf("MHR: ");
-      for (i=0; i<headerLen; i++){
-        printf("0x%02X ", header[i]);
-      }
-      printf(",");      
-      printf("%d,", payloadLen);
-      //printf("Payload: ");
-      for (i=0; i<payloadLen; i++){
-        printf("0x%02X ", payload[i]);
-      }
-      printf(",");
-      printf("%d,", call Frame.getLinkQuality(frame));
-
-      //printf("Timestamp: ");
-      if (call Frame.isTimestampValid(frame))
-        printf("%ld", call Frame.getTimestamp(frame));
-      else
-        printf("INVALID");
-      printf("\n");	
-      printfflush(); 
+        // NO TIMESTAMPS FROM HERE, will be added on the Java application
+        //printf("Timestamp: ");
+        // if (call Frame.isTimestampValid(frame))
+        //     printf("%ld", call Frame.getTimestamp(frame));
+        // else
+        //     printf("INVALID");
+        // printf("\n");
+        printfflush();
     }
     call Leds.led1Toggle();
     return frame;
-  }
+}
 
-  event void MCPS_DATA.confirm( message_t *msg, uint8_t msduHandle, ieee154_status_t status, uint32_t Timestamp){}
-  event void PromiscuousMode.startDone(error_t error) 
-  {
+event void MCPS_DATA.confirm( message_t *msg, uint8_t msduHandle, ieee154_status_t status, uint32_t Timestamp) {}
+event void PromiscuousMode.startDone(error_t error)
+{
     printf("\n*** Radio is now in promiscuous mode, listening on channel %d ***\n", RADIO_CHANNEL);
-    printfflush(); 
-  }
-  event void PromiscuousMode.stopDone(error_t error) {}
+    printfflush();
+}
+event void PromiscuousMode.stopDone(error_t error) {}
 }

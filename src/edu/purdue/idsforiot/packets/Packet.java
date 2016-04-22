@@ -51,6 +51,7 @@ public abstract class Packet {
 	
 
 	
+	// FORMAT: type, timestamp, src, dst, data
 	public String toCSV() {
 		return this.getType() + "," + this.getTimestamp() + "," + this.getSrc() + "," + this.getDst() + "," + this.getData();
 	}
@@ -58,7 +59,7 @@ public abstract class Packet {
 	
 	@Override
 	public String toString() {
-		return "Packet [src=" + this.getSrc() + ", data=" + this.getData() + "]";
+		return "Packet [src=" + this.getSrc() + ", dst=" + this.getDst() + ", data=" + this.getData() + "]";
 	}
 
 }

@@ -39,9 +39,9 @@
 package edu.purdue.idsforiot.telosb;
 
 import net.tinyos.message.*;
-import net.tinyos.packet.*;
 import net.tinyos.tools.PrintfMsg;
-import net.tinyos.util.*;
+//import net.tinyos.packet.*;
+//import net.tinyos.util.*;
 
 public class PrintfClient implements MessageListener {
 
@@ -74,29 +74,29 @@ public class PrintfClient implements MessageListener {
     
   }
   
-  private static void usage() {
-    System.err.println("usage: PrintfClient [-comm <source>]");
-  }
+//  private static void usage() {
+//    System.err.println("usage: PrintfClient [-comm <source>]");
+//  }
   
-  public static void main(String[] args) throws Exception {
-    String source = null;
-    if (args.length == 2) {
-      if (!args[0].equals("-comm")) {
-	       usage();
-	       System.exit(1);
-      }
-      source = args[1];
-    }
-    
-    PhoenixSource phoenix;
-    if (source == null) {
-      phoenix = BuildSource.makePhoenix(PrintStreamMessenger.err);
-    }
-    else {
-      phoenix = BuildSource.makePhoenix(source, PrintStreamMessenger.err);
-    }
-    System.out.print(phoenix);
-    MoteIF mif = new MoteIF(phoenix);
-    PrintfClient client = new PrintfClient(mif);
-  }
+//  public static void main(String[] args) throws Exception {
+//    String source = null;
+//    if (args.length == 2) {
+//      if (!args[0].equals("-comm")) {
+//	       usage();
+//	       System.exit(1);
+//      }
+//      source = args[1];
+//    }
+//    
+//    PhoenixSource phoenix;
+//    if (source == null) {
+//      phoenix = BuildSource.makePhoenix(PrintStreamMessenger.err);
+//    }
+//    else {
+//      phoenix = BuildSource.makePhoenix(source, PrintStreamMessenger.err);
+//    }
+//    System.out.print(phoenix);
+//    MoteIF mif = new MoteIF(phoenix);
+//    PrintfClient client = new PrintfClient(mif);
+//  }
 }

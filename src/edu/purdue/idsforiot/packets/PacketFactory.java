@@ -8,11 +8,9 @@ public class PacketFactory {
 		PacketTypes type = PacketTypes.valueOf(parts[0]);
 		switch (type) {
 			case WiFi:
-				return new WifiPacket(parts);
+				return WifiPacket.parseFromLog(raw);
 			case ZigBeeCTP:
-				return new ZigBeePacket(parts);
-			case ZigBeePlain:
-				return new CTPPacket(parts);
+				return ZigBeePacket.parseFromLog(raw);
 			default:
 				System.out.println("Unknown PacketType.");
 				return null;

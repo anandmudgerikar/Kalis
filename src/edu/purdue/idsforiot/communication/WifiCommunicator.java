@@ -7,32 +7,31 @@ import edu.purdue.idsforiot.packets.WifiPacket;
 
 public class WifiCommunicator implements Communicator {
 
-	private static Process tcpProcess;
-	private static BufferedReader tcpStream;
+	private static Process tcpdumpProcess;
+	private static BufferedReader tcpdumpStream;
 	
 	// TODO: what are the following 2 lines, and do we need them?
 	// private InputStream tcpInput;
 	// private boolean keepRunning = true;
 
-	/* (non-Javadoc)
-	 * @see edu.purdue.idsforiot.Communicator#listen()
-	 */
+	
 	@Override
 	public void listen() {
 		System.out.println("Starting TCPdump");
 		try {
+			// TODO: we need to read ALL packets and get each packet in real time, not waiting for the stream to close
 			String params[] = { "sudo", "tcpdump", "-ln", "-i", "eth0", "-c", "2" }; // reading just two packets for now
-			tcpProcess = Runtime.getRuntime().exec(params);
-			tcpStream = new BufferedReader(new InputStreamReader(tcpProcess.getInputStream()), 1);
+			tcpdumpProcess = Runtime.getRuntime().exec(params);
+			tcpdumpStream = new BufferedReader(new InputStreamReader(tcpdumpProcess.getInputStream()), 1);
 
-			String raw_bytes;
-			while ((raw_bytes = tcpStream.readLine()) != null) {
-				System.out.println(raw_bytes);
+			String rawLine;
+			while ((rawLine = tcpdumpStream.readLine()) != null) {
+				System.out.println(rawLine);
 
 				// we got a packet: decode it, skipping in case of decoding errors
 				WifiPacket p;
 				try {
-					p = new WifiPacket(raw_bytes.split(" "));
+					p = WifiPacket.parseFromLive(rawLine);
 				} catch (Exception ex) {
 					continue;
 				}

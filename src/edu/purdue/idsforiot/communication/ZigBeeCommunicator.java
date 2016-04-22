@@ -2,7 +2,6 @@
 package edu.purdue.idsforiot.communication;
 
 import edu.purdue.idsforiot.DataStore;
-import edu.purdue.idsforiot.packets.CTPPacket;
 import edu.purdue.idsforiot.packets.ZigBeePacket;
 import net.tinyos.message.*;
 import net.tinyos.packet.*;
@@ -45,11 +44,10 @@ public class ZigBeeCommunicator implements Communicator, MessageListener {
 			if (nextChar == '\n') {
 				System.out.println("The full message is " + nextline);
 				
-				// TODO: how do I know here if it's plain zigbee or ctp?
-				// TODO: let's unify ZigBee plain and CTP into just CTP where dest might be "" for broadcast
+				// TODO: let's unify ZigBee plain and CTP (in the TelosB app) into just CTP (calling it generically "ZigBee", and dest might be "" for broadcast)
 				ZigBeePacket p;
 				try {
-					p = new CTPPacket(nextline.split(","));
+					p = ZigBeePacket.parseFromLive(nextline);
 				} catch (Exception ex) {
 					continue;
 				}
