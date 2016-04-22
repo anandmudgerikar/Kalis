@@ -4,10 +4,10 @@
 
 Immediate items to do:
 
+* Make sure that we can listen to REAL-TIME, UNLIMITED AMOUNTS of WiFi traffic
 * Design Environment Sensing as a different kind of Module
 * Add Network Profiling module for traffic load, stats, ...
-* Add Enum with all packet types
-* Add first field in CSV format to store type of packet
+
 
 
 Daniele's to-do items (for now):
@@ -38,3 +38,5 @@ Done:
 * Format from sensor to Java: SrcAddr DstAddr MpduLinkQuality RSSI? PayloadLen Payload
 * Decode intercepted packets on the Java side
 * Intercept all WiFi traffic (for now, capture source IP, dest IP, data even if encrypted)
+* Add Enum with all packet types
+* Add first field in CSV format to store type of packet

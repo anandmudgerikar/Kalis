@@ -2,57 +2,63 @@ package edu.purdue.idsforiot.packets;
 
 import java.sql.Timestamp;
 
-public class Packet {
+public abstract class Packet {
 
-	private int nodeid;
-	private String data;
+	private PacketTypes type;
 	private long timestamp;
+	private String src;
+	private String dst;
+	private String data;
 
-	public Packet(String raw) {
-		this(Integer.parseInt(raw.substring(30, 32)),
-			 raw.substring(33, 35),
-			 new Timestamp(new java.util.Date().getTime()).getTime());
-	}
-	public Packet(int nodeid, String data, long timestamp) {
-		this.nodeid = nodeid;
+	public Packet(PacketTypes type, String src, String dst, String data) {
+		this.timestamp = new Timestamp(new java.util.Date().getTime()).getTime();
+		this.type = type;
+		this.src = src;
 		this.data = data;
-		this.timestamp = timestamp;
 	}
 
-	public int getNodeID() {
-		return nodeid;
+	
+	public PacketTypes getType() {
+		return type;
 	}
-
-	public void setNodeID(int nodeid) {
-		this.nodeid = nodeid;
+	public void setType(PacketTypes type) {
+		this.type = type;
 	}
-
 	public String getData() {
-		return data;
+		return this.data;
 	}
-
 	public void setData(String data) {
 		this.data = data;
 	}
-	
-	public long getTimeStamp() {
-		return timestamp;
+	public String getSrc() {
+		return this.src;
 	}
-
-	public void setTimeStamp(long timestamp ) {
+	public void setSrcAddr(String src) {
+		this.src = src;
+	}
+	public String getDst() {
+		return this.dst;
+	}
+	public void setDstAddr(String dst) {
+		this.dst = dst;
+	}
+	public long getTimestamp() {
+		return this.timestamp;
+	}
+	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
+	
 
 	
 	public String toCSV() {
-		return this.getNodeID() + "," + this.getData() + "," + this.getTimeStamp();
+		return this.getType() + "," + this.getTimestamp() + "," + this.getSrc() + "," + this.getDst() + "," + this.getData();
 	}
-	
 	
 	
 	@Override
 	public String toString() {
-		return "Packet [nodeid=" + nodeid + ", data=" + data + "]";
+		return "Packet [src=" + this.getSrc() + ", data=" + this.getData() + "]";
 	}
 
 }

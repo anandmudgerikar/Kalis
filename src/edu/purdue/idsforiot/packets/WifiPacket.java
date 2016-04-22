@@ -1,45 +1,29 @@
 package edu.purdue.idsforiot.packets;
 
-public class WifiPacket {
+public class WifiPacket extends Packet {
 
-	private String timestamp;
-	private String source_ip;
-	private String dest_ip;
-	
-	//we can add more fields if required later
-	public void setTimeStamp(String timestamp ) {
-		this.timestamp = timestamp;
+	public WifiPacket(String[] rawparts) {
+		this(rawparts[3], rawparts[5], "");
+		
+		// TODO: once the WiFi reading is done real-time, we will just let the timestamp be automatically generated in the Packet constructor
+		this.setTimestamp(Long.parseLong(rawparts[1]));
 	}
 	
-	public void setSourceIp(String source_ip ) {
-		this.source_ip = source_ip;
+	public WifiPacket(String src, String dst, String data) {
+		super(PacketTypes.WiFi, src, dst, data);
+	}
+
+	
+	public static WifiPacket parseFromLog(String raw) {
+		
+	}
+	public static WifiPacket parseFromLive(String raw) {
+		
 	}
 	
-	public void setDestIP(String dest_ip ) {
-		this.dest_ip = dest_ip;
-	}
-	
-	public String getTimeStamp()
-	{
-		return this.timestamp;
-	}
-	
-	public String getSourceIp()
-	{
-		return this.source_ip;
-	}
-	
-	public String getDestIp()
-	{
-		return this.dest_ip;
-	}
-	
-	public String toCSV() {
-		return this.getTimeStamp() + "," + this.getSourceIp() + "," + this.getDestIp();
-	}
-	
+
 	@Override
 	public String toString() {
-		return "Wifi Packet [TimeStamp=" + timestamp + ", source ip =" + source_ip + ", destination ip ="+ dest_ip +"]";
+		return "Wifi " + super.toString();
 	}
 }

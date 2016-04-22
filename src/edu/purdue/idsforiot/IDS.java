@@ -1,5 +1,7 @@
 package edu.purdue.idsforiot;
 
+import edu.purdue.idsforiot.communication.WifiCommunicator;
+import edu.purdue.idsforiot.communication.ZigBeeCommunicator;
 import edu.purdue.idsforiot.modules.ModuleManager;
 
 public class IDS {
@@ -28,12 +30,11 @@ public class IDS {
 		}
 		
 		if (tracefile.equals(null)) {
-			// create a Communicator to intercept packets
-			//Communicator communicator = new Communicator(source);
-			Communicator2 communicator = new Communicator2(source);
-			
-			// start listening for live packets
-			communicator.listen();
+			// create Communicators to intercept packets and start listening for live packets
+			ZigBeeCommunicator zigbeecommunicator = new ZigBeeCommunicator(source);
+			WifiCommunicator wificommunicator = new WifiCommunicator();
+			zigbeecommunicator.listen();
+			wificommunicator.listen();
 		} else {
 			// replay a trace
 			DataStore.getInstance().replayTrace(tracefile);

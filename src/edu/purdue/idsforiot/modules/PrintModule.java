@@ -1,7 +1,6 @@
 package edu.purdue.idsforiot.modules;
 
 import edu.purdue.idsforiot.packets.Packet;
-import edu.purdue.idsforiot.packets.CTPPacket;
 import edu.purdue.idsforiot.packets.WifiPacket;
 
 
