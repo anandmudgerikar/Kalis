@@ -15,7 +15,7 @@ public class ZigBeePacket extends Packet {
 	
 		
 	public ZigBeePacket(String src, String dest, String data, int rssi, String frameType, int thl, String origin, long seqNo, String collectId) {
-		super(PacketTypes.ZigBeePlain, src, dest, data);
+		super(PacketTypes.ZigBee, src, dest, data);
 		
 		this.frameType = frameType;
 		this.rssi = rssi;

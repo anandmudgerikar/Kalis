@@ -9,7 +9,7 @@ public class PacketFactory {
 		switch (type) {
 			case WiFi:
 				return WifiPacket.parseFromLog(raw);
-			case ZigBeeCTP:
+			case ZigBee:
 				return ZigBeePacket.parseFromLog(raw);
 			default:
 				System.out.println("Unknown PacketType.");
