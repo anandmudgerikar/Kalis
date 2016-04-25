@@ -77,6 +77,7 @@ public class DataStore {
         queues.get(p.getSrc()).add(p);
         
         // notify the Modules
+        System.out.println("New Packet: Notifying the Module Manager");
         ModuleManager.getInstance().onNewPacket(p);
     }
     

@@ -45,14 +45,18 @@ public class ZigBeeCommunicator implements Communicator, MessageListener {
 				System.out.println("The full message is " + nextline);
 				
 				// TODO: let's unify ZigBee plain and CTP (in the TelosB app) into just CTP (calling it generically "ZigBee", and dest might be "" for broadcast)
-				ZigBeePacket p;
+				ZigBeePacket p = new ZigBeePacket();
 				try {
 					p = ZigBeePacket.parseFromLive(nextline);
 				} catch (Exception ex) {
+					System.out.println("Exception in Packet Creation: This packet is not recorded");
+					ex.printStackTrace();
+					nextline = "";
 					continue;
 				}
 
 				// notify the DataStore
+				System.out.println("New Packet: Notifying the Data Store");
 				DataStore.getInstance().onNewPacket(p);
 				nextline = "";
 			}

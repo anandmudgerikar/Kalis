@@ -12,6 +12,12 @@ public class PrintModule implements Module, Runnable {
 		threadName = name;
 		System.out.println("Creating " + threadName);
 	}
+	
+
+	PrintModule() {
+		threadName = "unamed Thread";
+		System.out.println("Creating " + "unamed Thread");
+	}
 
 	public void run() {
 		System.out.println("Running " + threadName);

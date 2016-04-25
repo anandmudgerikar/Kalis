@@ -15,6 +15,12 @@ public abstract class Packet {
 		this.type = type;
 		this.src = src;
 		this.data = data;
+		this.dst = dst;
+	}
+	
+	public Packet()
+	{
+		System.out.println("Creating empty packet");
 	}
 
 	
@@ -59,7 +65,7 @@ public abstract class Packet {
 	
 	@Override
 	public String toString() {
-		return "Packet [src=" + this.getSrc() + ", dst=" + this.getDst() + ", data=" + this.getData() + "]";
+		return "Packet [src=" + this.getSrc() + ", dst=" + this.getDst() + ", data=" + this.getData() + ", TimeStamp=" + this.getTimestamp() + "]";
 	}
 
 }

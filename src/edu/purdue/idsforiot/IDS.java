@@ -10,7 +10,7 @@ public class IDS {
 		
 		// parse the command line args
 		String source = null;
-		String tracefile = null;
+		String tracefile = "";
 		for (String a : args) {
 			if (a.startsWith("-comm=")) source = a.substring("-comm=".length());
 			else if (a.startsWith("-t=")) tracefile = a.substring("-t=".length());
@@ -29,12 +29,12 @@ public class IDS {
 			System.exit(2);
 		}
 		
-		if (tracefile.equals(null)) {
+		if (tracefile.equals("")) {
 			// create Communicators to intercept packets and start listening for live packets
 			ZigBeeCommunicator zigbeecommunicator = new ZigBeeCommunicator(source);
-			WifiCommunicator wificommunicator = new WifiCommunicator();
+			//WifiCommunicator wificommunicator = new WifiCommunicator();
 			zigbeecommunicator.listen();
-			wificommunicator.listen();
+			//wificommunicator.listen();
 		} else {
 			// replay a trace
 			DataStore.getInstance().replayTrace(tracefile);
