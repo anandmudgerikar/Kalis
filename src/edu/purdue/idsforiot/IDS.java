@@ -1,6 +1,5 @@
 package edu.purdue.idsforiot;
 
-import edu.purdue.idsforiot.communication.WifiCommunicator;
 import edu.purdue.idsforiot.communication.ZigBeeCommunicator;
 import edu.purdue.idsforiot.modules.ModuleManager;
 
@@ -19,15 +18,20 @@ public class IDS {
 				System.err.println("       (default packet source from MOTECOM environment variable)");
 				System.exit(2);
 			}
-		}		
+		}
 		
-		// start the ModuleManager to load the necessary modules
+		IDS ids = new IDS();
 		try {
-			ModuleManager.getInstance().start();
-		} catch (InstantiationException | IllegalAccessException e) {
+			ids.start(source, tracefile);
+		} catch (IDSforIoTException e) {
 			e.printStackTrace();
 			System.exit(2);
 		}
+	}
+	
+	
+	public void start(String source, String tracefile) throws IDSforIoTException {
+		ModuleManager.getInstance().start();
 		
 		if (tracefile.equals("")) {
 			// create Communicators to intercept packets and start listening for live packets
@@ -39,7 +43,6 @@ public class IDS {
 			// replay a trace
 			DataStore.getInstance().replayTrace(tracefile);
 		}
-		
 	}
-
+	
 }

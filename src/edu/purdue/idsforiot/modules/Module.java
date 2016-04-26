@@ -1,14 +1,23 @@
 package edu.purdue.idsforiot.modules;
 
 import edu.purdue.idsforiot.packets.Packet;
-import edu.purdue.idsforiot.packets.WifiPacket;
 
-public interface Module {
+public abstract class Module {
 
-	public void onNewPacket(Packet p);
+	private ModuleManager manager;
 	
-	public void onNewPacket(WifiPacket p);
+	public Module(ModuleManager mgr) {
+		this.manager = mgr;
+	}
 	
-	public void start();
+	protected ModuleManager getManager() {
+		return this.manager;
+	}
+	
+	public abstract void onNewPacket(Packet p);
+	
+	public void start() {
+		System.out.println("Module " + this.getClass().getSimpleName() + " loaded.");
+	}
 	
 }

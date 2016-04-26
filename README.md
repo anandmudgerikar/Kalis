@@ -11,7 +11,6 @@ Immediate items to do:
 Daniele's to-do items (for now):
 
 * Design Environment Sensing as a different kind of Module
-* Add Network Profiling module for traffic load, stats, ...
 * Figure out SoC for DataStore and Modules wrt queues
 * Implement a SelectiveForwarding module.
 * Have each module expose its characteristics statically (for now, e.g., "IsForMultihop" and "IsForSinglehop" could be static bool properties). The KnowledgeBase component then should be able to iterate over all modules in the edu.purdue.idsforiot.modules package and select only those that have the right characteristics for the current environment.
@@ -21,6 +20,7 @@ Daniele's to-do items (for now):
 To-do items for next iteration:
 * Environmental Sensing component
 * Implement a couple more Modules for different attacks (Wifi vs ZigBee, ...).
+* Add Network Profiling module for traffic load, stats, ...
 
 
 
