@@ -7,5 +7,8 @@ public class IDSforIoTException extends Exception {
 	public IDSforIoTException(Exception e) {
 		super(e);
 	}
+	public IDSforIoTException(String message) {
+		super(message);
+	}
 
 }

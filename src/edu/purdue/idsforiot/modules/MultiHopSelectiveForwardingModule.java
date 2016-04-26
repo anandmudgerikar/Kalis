@@ -7,7 +7,7 @@ import java.util.Queue;
 
 import edu.purdue.idsforiot.packets.Packet;
 
-public class MultiHopSelectiveForwardingModule extends Module {
+public class MultiHopSelectiveForwardingModule extends DetectionModule {
 
 	private Map<String, Queue<Packet>> queues;
 
@@ -48,6 +48,21 @@ public class MultiHopSelectiveForwardingModule extends Module {
 		
 		// push packet to queue of dest
 		this.getQueueFor(p.getDst()).offer(p);
+	}
+
+	
+	
+	
+	/* Module characteristics */
+	
+	@Override
+	public boolean isMultihop() {
+		return true;
+	}
+
+	@Override
+	public boolean isSinglehop() {
+		return false;
 	}
 
 
