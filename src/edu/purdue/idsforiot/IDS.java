@@ -1,5 +1,6 @@
 package edu.purdue.idsforiot;
 
+import edu.purdue.idsforiot.communication.WifiCommunicator;
 import edu.purdue.idsforiot.communication.ZigBeeCommunicator;
 import edu.purdue.idsforiot.modules.ModuleManager;
 
