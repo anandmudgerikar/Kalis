@@ -33,7 +33,7 @@ public class ZigBeePacket extends Packet {
 	public String toCSV() {
 		return super.toCSV() + "," + this.getRSSI() + "," + this.getFrameType() + "," + this.getTHL() + "," + this.getOrigin() + "," + this.getSeqNo() + "," + this.getCollectID();
 	}
-
+	
 	/// CSV FORMAT: type, timestamp, src, dst, data, RSSI, frametype, THL, Origin, SeqNo, CollectID
 	public static ZigBeePacket parseFromLog(String raw) {
 		String[] parts = raw.split(",");

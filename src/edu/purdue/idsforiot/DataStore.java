@@ -19,11 +19,11 @@ public class DataStore {
         return instance;
     }
 
-    private Map<String, Queue<Packet>> queues;
+    private Map<String, List<Packet>> trafficHistory;
 
     private DataStore() {
         // initializing the queues
-        this.queues = new HashMap<String, Queue<Packet>>();
+        this.trafficHistory = new HashMap<String, List<Packet>>();
     }
 
     
@@ -34,6 +34,9 @@ public class DataStore {
             Packet prevPkt = null;
             
             while ((raw = br.readLine()) != null) {
+            	// ignore comment lines
+            	if (raw.equals("") || raw.startsWith("//")) continue;
+            	
                 // decode packet, skipping in case of decoding errors
                 Packet p = PacketFactory.getPacket(raw);
                 if (p == null) continue;
@@ -64,7 +67,7 @@ public class DataStore {
         if (log) {
             try {
                 // log the packet on file (in CSV format)
-                FileOutputStream csvfileWriter = new FileOutputStream(new File("data/CSVpacketcapture.txt"), true);
+                FileOutputStream csvfileWriter = new FileOutputStream(new File("data/log.txt"), true);
                 csvfileWriter.write(p.toCSV().getBytes()); 
                 OutputStreamWriter osw = new OutputStreamWriter(csvfileWriter);
                 osw.append(System.getProperty("line.separator"));
@@ -74,11 +77,11 @@ public class DataStore {
                 e.printStackTrace();
             }
         }
-                        
+        
         // add to appropriate queue
-        if (!queues.containsKey(p.getSrc()))
-            queues.put(p.getSrc(), new LinkedList<Packet>());
-        queues.get(p.getSrc()).add(p);
+        if (!trafficHistory.containsKey(p.getSrc()))
+            trafficHistory.put(p.getSrc(), new LinkedList<Packet>());
+        trafficHistory.get(p.getSrc()).add(p);
         
         // notify the Modules
         System.out.println("New Packet: Notifying the Module Manager");
@@ -88,8 +91,8 @@ public class DataStore {
     
     
 
-    public Queue<Packet> getQueue(String nodeID) {
-        return queues.get(nodeID);
+    public List<Packet> getTrafficHistoryFor(String nodeID) {
+        return trafficHistory.get(nodeID);
     }
 
     public void onNewPacket(WifiPacket p) {

@@ -8,19 +8,9 @@ Immediate items to do:
 * Check all the TODOs in the Java code and in the TelosB code and get them all done
 
 
-Daniele's to-do items (for now):
-
-* Design Environment Sensing as a different kind of Module
-* Add Network Profiling module for traffic load, stats, ...
-* Figure out SoC for DataStore and Modules wrt queues
-* Implement a SelectiveForwarding module.
-* Have each module expose its characteristics statically (for now, e.g., "IsForMultihop" and "IsForSinglehop" could be static bool properties). The KnowledgeBase component then should be able to iterate over all modules in the edu.purdue.idsforiot.modules package and select only those that have the right characteristics for the current environment.
-* Notify the modules only for the traffic they're interested in.
-
-
 To-do items for next iteration:
-* Environmental Sensing component
 * Implement a couple more Modules for different attacks (Wifi vs ZigBee, ...).
+* Add Network Profiling module for traffic load, stats, ...
 
 
 
@@ -41,3 +31,8 @@ Done:
 * Intercept all WiFi traffic (for now, capture source IP, dest IP, data even if encrypted)
 * Add Enum with all packet types
 * Add first field in CSV format to store type of packet
+* Implement a SelectiveForwarding module.
+* Design Environment Sensing as a different kind of Module
+* Figure out SoC for DataStore and Modules wrt queues
+* Have each module expose its characteristics statically (for now, e.g., "IsForMultihop" and "IsForSinglehop" could be static bool properties). The KnowledgeBase component then should be able to iterate over all modules in the edu.purdue.idsforiot.modules package and select only those that have the right characteristics for the current environment.
+* Environmental Sensing component
