@@ -3,8 +3,6 @@
 ### TO-DOs ###
 
 Immediate items to do:
-
-* Make sure that we can listen to REAL-TIME, UNLIMITED AMOUNTS of WiFi traffic
 * Check all the TODOs in the Java code and in the TelosB code and get them all done
 
 
@@ -16,6 +14,8 @@ To-do items for next iteration:
 
 Done:
 
+
+* Make sure that we can listen to REAL-TIME, UNLIMITED AMOUNTS of WiFi traffic
 * Remove need for full package name in initial config file and simply add that string in front when you are about to use Reflection to load the module class.
 * PacketFactory.getPacket(String[] raw) does not call any Packet constructor! (And actually would always generate an error at the moment...).
 * The DataStore.onNewPacket() methods have a lot of duplicated code!
