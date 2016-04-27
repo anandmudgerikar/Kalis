@@ -5,6 +5,7 @@ import java.util.*;
 
 import edu.purdue.idsforiot.modules.ModuleManager;
 import edu.purdue.idsforiot.packets.Packet;
+import edu.purdue.idsforiot.packets.WifiPacket;
 import edu.purdue.idsforiot.packets.PacketFactory;
 
 public class DataStore {
@@ -65,6 +66,9 @@ public class DataStore {
                 // log the packet on file (in CSV format)
                 FileOutputStream csvfileWriter = new FileOutputStream(new File("data/CSVpacketcapture.txt"), true);
                 csvfileWriter.write(p.toCSV().getBytes()); 
+                OutputStreamWriter osw = new OutputStreamWriter(csvfileWriter);
+                osw.append(System.getProperty("line.separator"));
+                osw.close();
                 csvfileWriter.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -88,6 +92,22 @@ public class DataStore {
         return queues.get(nodeID);
     }
 
+    public void onNewPacket(WifiPacket p) {
+         
+    		System.out.println("Writing wifi packet to file");
+            try {
+                // log the packet on file (in CSV format)
+                FileOutputStream csvfileWriter = new FileOutputStream(new File("data/Wifipacketcapture.txt"), true);
+                csvfileWriter.write(p.toCSV().getBytes()); 
+                OutputStreamWriter osw = new OutputStreamWriter(csvfileWriter);
+                osw.append(System.getProperty("line.separator"));
+                osw.close();
+                csvfileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        
+    }   
     
 
 }

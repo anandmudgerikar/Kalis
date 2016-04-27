@@ -32,9 +32,9 @@ public class IDS {
 		if (tracefile.equals("")) {
 			// create Communicators to intercept packets and start listening for live packets
 			ZigBeeCommunicator zigbeecommunicator = new ZigBeeCommunicator(source);
-			//WifiCommunicator wificommunicator = new WifiCommunicator();
+			WifiCommunicator wificommunicator = new WifiCommunicator();
 			zigbeecommunicator.listen();
-			//wificommunicator.listen();
+			wificommunicator.listen();
 		} else {
 			// replay a trace
 			DataStore.getInstance().replayTrace(tracefile);

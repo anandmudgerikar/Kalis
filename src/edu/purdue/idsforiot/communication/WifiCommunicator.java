@@ -13,14 +13,13 @@ public class WifiCommunicator implements Communicator {
 	// TODO: what are the following 2 lines, and do we need them?
 	// private InputStream tcpInput;
 	// private boolean keepRunning = true;
-
 	
 	@Override
 	public void listen() {
 		System.out.println("Starting TCPdump");
 		try {
 			// TODO: we need to read ALL packets and get each packet in real time, not waiting for the stream to close
-			String params[] = { "sudo", "tcpdump", "-ln", "-i", "eth0", "-c", "2" }; // reading just two packets for now
+			String params[] = { "sudo", "tcpdump", "-ln", "-i", "eth0"}; // reading just two packets for now
 			tcpdumpProcess = Runtime.getRuntime().exec(params);
 			tcpdumpStream = new BufferedReader(new InputStreamReader(tcpdumpProcess.getInputStream()), 1);
 
@@ -29,10 +28,12 @@ public class WifiCommunicator implements Communicator {
 				System.out.println(rawLine);
 
 				// we got a packet: decode it, skipping in case of decoding errors
-				WifiPacket p;
+				WifiPacket p = new WifiPacket();
 				try {
 					p = WifiPacket.parseFromLive(rawLine);
 				} catch (Exception ex) {
+					System.out.println("Exception in parsing wifi packet");
+					ex.printStackTrace();
 					continue;
 				}
 
