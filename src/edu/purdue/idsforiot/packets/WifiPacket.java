@@ -9,7 +9,7 @@ public class WifiPacket extends Packet {
 	/// CSV FORMAT: type, timestamp, src, dst, data
 	public static WifiPacket parseFromLog(String raw) {
 		String[] parts = raw.split(",");
-		WifiPacket p = new WifiPacket(parts[2], parts[3], parts[4]);
+		WifiPacket p = new WifiPacket(parts[2], parts[3], (parts.length >=5 ? parts[4] : ""));
 		p.setTimestamp(Long.parseLong(parts[1]));
 		return p;
 	}
