@@ -1,5 +1,8 @@
 package edu.purdue.idsforiot.knowledge;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.purdue.idsforiot.modules.ModuleManager;
 
 public class KnowledgeBase {
@@ -15,6 +18,13 @@ public class KnowledgeBase {
 	
 	private boolean isMultihop = false;
 	private boolean isSinglehop = false;
+	
+	private Map<TrafficType, Float> trafficFrequency;
+	
+	
+	private KnowledgeBase() {
+		this.trafficFrequency = new HashMap<TrafficType, Float>();
+	}
 	
 	
 	private void onKnowledgeChanged(String changedKnowledgePiece) {
@@ -36,6 +46,15 @@ public class KnowledgeBase {
 	public void setSinglehop(boolean isSinglehop) {
 		this.isSinglehop = isSinglehop;
 		this.onKnowledgeChanged("isSinglehop");
+	}
+	
+	
+	public float getTrafficFrequency(TrafficType trafficType) {
+		return this.trafficFrequency.getOrDefault(trafficType, 0.0F);
+	}
+	public void setTrafficFrequency(TrafficType trafficType, float frequency) {
+		this.trafficFrequency.put(trafficType, frequency);
+		this.onKnowledgeChanged("trafficFrequency");
 	}
 	
 }
