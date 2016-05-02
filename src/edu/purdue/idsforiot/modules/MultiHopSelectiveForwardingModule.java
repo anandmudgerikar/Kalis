@@ -5,7 +5,9 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
+import edu.purdue.idsforiot.knowledge.KnowledgeBase;
 import edu.purdue.idsforiot.packets.Packet;
+import edu.purdue.idsforiot.packets.ZigBeePacket;
 
 public class MultiHopSelectiveForwardingModule extends DetectionModule {
 
@@ -31,6 +33,8 @@ public class MultiHopSelectiveForwardingModule extends DetectionModule {
 	
 	@Override
 	public void onNewPacket(Packet p) {
+		if (!(p instanceof ZigBeePacket)) return;
+		
 		Queue<Packet> srcQ = this.getQueueFor(p.getSrc());
 		if (srcQ.isEmpty()){
 			// packet originated from src
@@ -52,17 +56,9 @@ public class MultiHopSelectiveForwardingModule extends DetectionModule {
 
 	
 	
-	
-	/* Module characteristics */
-	
 	@Override
-	public boolean isMultihop() {
-		return true;
-	}
-
-	@Override
-	public boolean isSinglehop() {
-		return false;
+	public boolean shouldBeActive(KnowledgeBase kb) {
+		return kb.isMultihop();
 	}
 
 

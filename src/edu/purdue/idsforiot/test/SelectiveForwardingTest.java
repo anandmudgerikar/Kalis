@@ -40,7 +40,8 @@ public class SelectiveForwardingTest {
 	public void testMultiHopSelectiveForwardingFromTrace() {
 		String expected = "DETECTED: Selective Forwarding attack by Entity 0x01 (Module MultiHopSelectiveForwardingModule) [e]\n" +
 					      "DETECTED: Selective Forwarding attack by Entity 0x03 (Module MultiHopSelectiveForwardingModule) [g]\n" +
-					      "DETECTED: Selective Forwarding attack by Entity 0x03 (Module MultiHopSelectiveForwardingModule) [h]\n";
+					      "DETECTED: Selective Forwarding attack by Entity 0x03 (Module MultiHopSelectiveForwardingModule) [h]\n" +
+					      "DETECTED: Selective Forwarding attack by Entity 0x01 (Module MultiHopSelectiveForwardingModule) [l]\n";
 		
 		try {
 			this.ids.start("", "data/ZigBeeSelFwd.txt");

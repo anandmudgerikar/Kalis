@@ -2,7 +2,7 @@ package edu.purdue.idsforiot.knowledge;
 
 import edu.purdue.idsforiot.modules.ModuleManager;
 
-public class KnowledgeBase implements KnowledgeDependentEntity {
+public class KnowledgeBase {
 	
 	// SINGLETON pattern
 	private static KnowledgeBase instance = new KnowledgeBase();

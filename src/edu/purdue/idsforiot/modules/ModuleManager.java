@@ -97,22 +97,32 @@ public final class ModuleManager {
 		return this.activateModule(module);
 	}
 	private Module activateModule(Module module) {
+		// check if module is already active
 		String moduleName = module.getClass().getSimpleName();
+		if (!this.inactiveModules.containsKey(moduleName)) return module;
+		
 		module.start();
 		this.inactiveModules.remove(moduleName);
 		if (module instanceof DetectionModule)
 			this.activeDetectionModules.put(moduleName, module);
 		else
 			this.activeSensingModules.put(moduleName, module);
-			
+		
+		System.out.println("Activating module " + module.getClass().getSimpleName());
+		
 		return module;
 	}
 	private Module deactivateModule(Module module) {
+		// check if module is already inactive
 		String moduleName = module.getClass().getSimpleName();
-		module.start();
+		if (this.inactiveModules.containsKey(moduleName)) return module;
+		
 		this.activeDetectionModules.remove(moduleName);
 		this.activeSensingModules.remove(moduleName);
 		this.inactiveModules.put(moduleName, module);
+
+		System.out.println("Deactivating module " + module.getClass().getSimpleName());
+		
 		return module;
 	}
 
@@ -124,18 +134,8 @@ public final class ModuleManager {
 		// iterate over all DetectionModules
 		for (Module m : this.allModules.values()) {
 			if (m instanceof DetectionModule) {
-				boolean knowledgeInModule = false;
-				boolean knowledgeInKB = false;
-				try {
-					knowledgeInModule = (boolean) m.getClass().getMethod(changedKnowledgePiece).invoke(m);
-					knowledgeInKB = (boolean) KnowledgeBase.class.getMethod(changedKnowledgePiece).invoke(kb);
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-						| NoSuchMethodException | SecurityException e) {
-					e.printStackTrace();
-				}
-
 				// is this module relevant according to current KB?
-				if (knowledgeInModule == knowledgeInKB) {
+				if (((DetectionModule) m).shouldBeActive(kb)) {
 					this.activateModule(m);
 				} else {
 					this.deactivateModule(m);
