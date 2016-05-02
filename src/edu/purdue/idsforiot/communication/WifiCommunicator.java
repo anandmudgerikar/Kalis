@@ -27,18 +27,16 @@ public class WifiCommunicator implements Communicator {
 			while ((rawLine = tcpdumpStream.readLine()) != null) {
 				System.out.println(rawLine);
 
-				// we got a packet: decode it, skipping in case of decoding errors
-				WifiPacket p = new WifiPacket();
 				try {
-					p = WifiPacket.parseFromLive(rawLine);
+					// we got a packet: decode it, skipping in case of decoding errors
+					WifiPacket p = WifiPacket.parseFromLive(rawLine);
+
+					// notify the DataStore
+					DataStore.getInstance().onNewPacket(p);
 				} catch (Exception ex) {
 					System.out.println("Exception in parsing wifi packet");
 					ex.printStackTrace();
-					continue;
 				}
-
-				// notify the DataStore
-				DataStore.getInstance().onNewPacket(p);
 			}
 		} catch (Exception e) {
 			System.err.println("TCPDump initialize failure.");

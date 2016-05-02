@@ -5,12 +5,6 @@ public class WifiPacket extends Packet {
 	public WifiPacket(String src, String dst, String data) {
 		super(PacketTypes.WiFi, src, dst, data);
 	}
-	
-	public WifiPacket()
-	{
-		super();
-	}
-
 
 	/// CSV FORMAT: type, timestamp, src, dst, data
 	public static WifiPacket parseFromLog(String raw) {
