@@ -16,7 +16,7 @@ public class WifiPacket extends Packet {
 	
 	public static WifiPacket parseFromLive(String raw) {
 		String[] parts = raw.split(" ");
-		WifiPacket p = new WifiPacket(parts[2], parts[4], "");	
+		WifiPacket p = new WifiPacket(parts[2], parts[4], parts[6].substring(1,3)); //sending flag in data for now	
 		return p;
 	}
 	

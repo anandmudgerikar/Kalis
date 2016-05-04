@@ -94,23 +94,4 @@ public class DataStore {
     public List<Packet> getTrafficHistoryFor(String nodeID) {
         return trafficHistory.get(nodeID);
     }
-
-    public void onNewPacket(WifiPacket p) {
-         
-    		System.out.println("Writing wifi packet to file");
-            try {
-                // log the packet on file (in CSV format)
-                FileOutputStream csvfileWriter = new FileOutputStream(new File("data/Wifipacketcapture.txt"), true);
-                csvfileWriter.write(p.toCSV().getBytes()); 
-                OutputStreamWriter osw = new OutputStreamWriter(csvfileWriter);
-                osw.append(System.getProperty("line.separator"));
-                osw.close();
-                csvfileWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        
-    }   
-    
-
 }

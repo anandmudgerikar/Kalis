@@ -12,15 +12,10 @@ public class PrintModule extends DetectionModule {
 	public void onNewPacket(Packet p) {
 		System.out.println(p);
 	}
-
 	
 	@Override
 	public boolean shouldBeActive(KnowledgeBase kb) {
 		return true;
 	}
-
-	
-	
-	
 
 }
