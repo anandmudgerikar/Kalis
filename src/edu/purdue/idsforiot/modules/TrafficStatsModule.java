@@ -1,5 +1,7 @@
 package edu.purdue.idsforiot.modules;
 
+import java.util.Map;
+
 import edu.purdue.idsforiot.knowledge.KnowledgeBase;
 import edu.purdue.idsforiot.knowledge.TrafficType;
 import edu.purdue.idsforiot.packets.Packet;
@@ -9,6 +11,9 @@ public class TrafficStatsModule extends SensingModule {
 	public TrafficStatsModule(ModuleManager mgr, KnowledgeBase kb) {
 		super(mgr, kb);
 	}
+	
+	private Map<TrafficType, Float> currtrafficFrequency;
+	private long prevTimeStamp = 0;
 	
 	@Override
 	public void onNewPacket(Packet p) {
@@ -31,21 +36,27 @@ public class TrafficStatsModule extends SensingModule {
 		
 		 // TODO: keep track of traffic and compute frequency as packets of this type per second
 		
-		float frequency = this.getKnowledgeBase().getTrafficFrequency(type);
+		float count = currtrafficFrequency.getOrDefault(type, 0.0f)*5;
 		
-		if(frequency == 0)
-		{
-			frequency = 1/5;  //we are calculating these over time periods of 5
-		}
+		if(prevTimeStamp == 0) //if it is the first packet
+			prevTimeStamp = p.getTimestamp();
 		else
 		{
-			frequency = ((frequency*5) + 1)/5;
+			if((p.getTimestamp()-prevTimeStamp) > 5)
+			{
+				count = 0;
+			}
 		}
+		
+		count++;
+		currtrafficFrequency.put(type,count/5);
+		
 			
 		// only update the frequency in the KB when difference is more than a threshold (e.g. 2)
-		float currFreq = this.getKnowledgeBase().getTrafficFrequency(type);
-		if (Math.abs(currFreq - frequency) >= 1)
-			this.getKnowledgeBase().setTrafficFrequency(type, frequency);
+		float currRecordedFreq = this.getKnowledgeBase().getTrafficFrequency(type);
+		float currFreq = currtrafficFrequency.getOrDefault(type, 0.0f);
+		if (Math.abs(currFreq - currRecordedFreq ) >= 1)
+			this.getKnowledgeBase().setTrafficFrequency(type, currFreq);
 	}
 
 }

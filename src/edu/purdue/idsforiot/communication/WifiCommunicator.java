@@ -19,7 +19,7 @@ public class WifiCommunicator implements Communicator {
 		System.out.println("Starting TCPdump");
 		try {
 			// TODO: we need to read ALL packets and get each packet in real time, not waiting for the stream to close
-			String params[] = { "sudo", "tcpdump", "-ln", "-i", "eth0"}; // reading just two packets for now
+			String params[] = { "sudo", "tcpdump", "-ln", "-i", "eth0"}; //change eth0 to wlan0 when listening to wifi traffic
 			tcpdumpProcess = Runtime.getRuntime().exec(params);
 			tcpdumpStream = new BufferedReader(new InputStreamReader(tcpdumpProcess.getInputStream()), 1);
 
