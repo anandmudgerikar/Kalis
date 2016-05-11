@@ -14,7 +14,7 @@ public class SYNFloodModule extends DetectionModule {
 	@Override
 	public boolean shouldBeActive(KnowledgeBase kb) {
 		// TODO: determine right threshold for activation/deactivation of this (in terms of packets/second)
-		return KnowledgeBase.getInstance().getTrafficFrequency(TrafficType.WiFiSYN) > 5;
+		return KnowledgeBase.getInstance().getTrafficFrequency(TrafficType.WiFiSYN) >= 1;
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class SYNFloodModule extends DetectionModule {
 		if (!(p instanceof WifiPacket)) return;
 		
 		// TODO: is this (i.e., when more than N SYN pkts/sec, just alert) the best way to alert of SYN flood attacks?
-		if (KnowledgeBase.getInstance().getTrafficFrequency(TrafficType.WiFiSYN) > 5)
+		if (KnowledgeBase.getInstance().getTrafficFrequency(TrafficType.WiFiSYN) >= 1)
 			this.getManager().onDetection(this, "SYN Flood", p.getSrc(), p);
 	}
 

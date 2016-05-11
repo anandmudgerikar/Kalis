@@ -1,5 +1,6 @@
 package edu.purdue.idsforiot.modules;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import edu.purdue.idsforiot.knowledge.KnowledgeBase;
@@ -10,6 +11,7 @@ public class TrafficStatsModule extends SensingModule {
 
 	public TrafficStatsModule(ModuleManager mgr, KnowledgeBase kb) {
 		super(mgr, kb);
+		currtrafficFrequency = new HashMap<TrafficType, Float>();
 	}
 	
 	private Map<TrafficType, Float> currtrafficFrequency;
@@ -20,7 +22,7 @@ public class TrafficStatsModule extends SensingModule {
 		// TODO: calculate traffic frequency (packets per second?) for each traffic type listed in the edu.purdue.idsforiot.knowledge.TrafficType enum
 		TrafficType type;
 		
-		if(p.getData() == "S" )
+		if((p.getData().contains("S")))
 		{
 		 type = TrafficType.WiFiSYN; // TODO: get the right type depending on the parameter p
 		 
@@ -38,25 +40,24 @@ public class TrafficStatsModule extends SensingModule {
 		
 		float count = currtrafficFrequency.getOrDefault(type, 0.0f)*5;
 		
-		if(prevTimeStamp == 0) //if it is the first packet
-			prevTimeStamp = p.getTimestamp();
-		else
-		{
-			if((p.getTimestamp()-prevTimeStamp) > 5)
+		if((p.getTimestamp()-prevTimeStamp) > 5)
 			{
 				count = 0;
+				prevTimeStamp = p.getTimestamp();
+				this.getKnowledgeBase().setTrafficFrequency(TrafficType.WiFiSYN,0.0f);
 			}
-		}
 		
 		count++;
-		currtrafficFrequency.put(type,count/5);
+		currtrafficFrequency.put(type,(count/5));
 		
-			
 		// only update the frequency in the KB when difference is more than a threshold (e.g. 2)
 		float currRecordedFreq = this.getKnowledgeBase().getTrafficFrequency(type);
 		float currFreq = currtrafficFrequency.getOrDefault(type, 0.0f);
 		if (Math.abs(currFreq - currRecordedFreq ) >= 1)
 			this.getKnowledgeBase().setTrafficFrequency(type, currFreq);
+		
+			
+		
 	}
 
 }
