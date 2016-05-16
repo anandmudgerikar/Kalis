@@ -6,55 +6,101 @@ import java.util.Map;
 import edu.purdue.idsforiot.modules.ModuleManager;
 
 public class KnowledgeBase {
-	
+
 	// SINGLETON pattern
 	private static KnowledgeBase instance = new KnowledgeBase();
+
 	public static KnowledgeBase getInstance() {
 		if (instance == null)
 			instance = new KnowledgeBase();
 		return instance;
 	}
-	
-	
-	private boolean isMultihop = false;
-	private boolean isSinglehop = false;
-	
-	private Map<TrafficType, Float> trafficFrequency;
-	
-	
+
+
+	private Map<String, String> knowggets;
+
 	private KnowledgeBase() {
-		this.trafficFrequency = new HashMap<TrafficType, Float>();
+		knowggets = new HashMap<String, String>();
 	}
-	
-	
+
 	private void onKnowledgeChanged(String changedKnowledgePiece) {
 		ModuleManager.getInstance().updateModules(this, changedKnowledgePiece);
 	}
+
+	public <T> void setKnowledge(String label, T value) {
+		this.setKnowledge(label, value, null, null);
+	}
+	public <T> void setKnowledge(String label, T value, String creator) {
+		this.setKnowledge(label, value, creator, null);
+	}
+	public <T> void setKnowledge(String label, T value, String creator, String entity) {
+		String key = (entity != null ? entity : ModuleManager.getInstance().getIDSNodeId()) + "$" + label + (entity != null ? "@" + entity : "");
+		String newValue = value.toString();
+		String oldValue = this.knowggets.getOrDefault(key, null);
+		if (oldValue == null || oldValue != newValue) {
+			this.knowggets.put(key, newValue);
+			this.onKnowledgeChanged(label);
+		}
+	}
+
+	public String getRawKnowledge(String label, String creator) {
+		return this.getRawKnowledge(label, creator, null);
+	}
+	public String getRawKnowledge(String label, String creator, String entity) {
+		String key = (entity != null ? entity : ModuleManager.getInstance().getIDSNodeId()) + "$" + label + (entity != null ? "@" + entity : "");
+		return this.knowggets.getOrDefault(key, null);
+	}
+	
 	
 
-	public boolean isMultihop() {
-		return isMultihop;
+	
+	/* BASIC KNOWLEDGE GETTERS for primitive types */
+	
+	public Integer getKnowledgeInteger(String label) {
+		return this.getKnowledgeInteger(label, null, null);
 	}
-	public void setMultihop(boolean isMultihop) {
-		this.isMultihop = isMultihop;
-		this.onKnowledgeChanged("isMultihop");
+	public Integer getKnowledgeInteger(String label, String creator) {
+		return this.getKnowledgeInteger(label, creator, null);
+	}
+	public Integer getKnowledgeInteger(String label, String creator, String entity) {
+		String value = this.getRawKnowledge(label, creator, entity);
+		return value != null ? Integer.parseInt(value) : null;
 	}
 
-	public boolean isSinglehop() {
-		return isSinglehop;
+	public Float getKnowledgeFloat(String label) {
+		return this.getKnowledgeFloat(label, null, null);
 	}
-	public void setSinglehop(boolean isSinglehop) {
-		this.isSinglehop = isSinglehop;
-		this.onKnowledgeChanged("isSinglehop");
+	public Float getKnowledgeFloat(String label, String creator) {
+		return this.getKnowledgeFloat(label, creator, null);
 	}
+	public Float getKnowledgeFloat(String label, String creator, String entity) {
+		String value = this.getRawKnowledge(label, creator, entity);
+		return value != null ? Float.parseFloat(value) : null;
+	}
+
+	public Boolean getKnowledgeBoolean(String label) {
+		return this.getKnowledgeBoolean(label, null, null);
+	}
+	public Boolean getKnowledgeBoolean(String label, String creator) {
+		return this.getKnowledgeBoolean(label, creator, null);
+	}
+	public Boolean getKnowledgeBoolean(String label, String creator, String entity) {
+		String value = this.getRawKnowledge(label, creator, entity);
+		return value != null ? Boolean.parseBoolean(value) : null;
+	}
+
+
 	
+	
+	/* UTILITY METHODS for convenience */
 	
 	public float getTrafficFrequency(TrafficType trafficType) {
-		return this.trafficFrequency.getOrDefault(trafficType, 0.0F);
+		Float f = this.getKnowledgeFloat("trafficFrequency." + trafficType.toString());
+		return f != null ? f : 0.0F;
 	}
+
 	public void setTrafficFrequency(TrafficType trafficType, float frequency) {
-		this.trafficFrequency.put(trafficType, frequency);
-		this.onKnowledgeChanged("trafficFrequency");
+		this.setKnowledge("trafficFrequency." + trafficType.toString(), frequency);
 	}
-	
+
 }

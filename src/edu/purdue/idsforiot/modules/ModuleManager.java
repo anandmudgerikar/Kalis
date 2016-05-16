@@ -22,17 +22,22 @@ public final class ModuleManager {
 		return instance;
 	}
 
+	
 	private Map<String, Module> allModules;
 	private Map<String, Module> activeDetectionModules;
 	private Map<String, Module> activeSensingModules;
 	private Map<String, Module> inactiveModules;
 
+	private String idsNodeId;
+	
 	
 	private ModuleManager() {
 		this.allModules = new HashMap<String, Module>();
 		this.activeDetectionModules = new HashMap<String, Module>();
 		this.activeSensingModules = new HashMap<String, Module>();
 		this.inactiveModules = new HashMap<String, Module>();
+		
+		this.setIDSNodeId(java.util.UUID.randomUUID().toString());
 	}
 
 
@@ -162,6 +167,14 @@ public final class ModuleManager {
 	public void onDetection(Module module, String attackName, String suspect, Packet p) {
 		System.err.format("DETECTED: %s attack by Entity %s (Module %s) [%s]\n", attackName, suspect,
 				module.getClass().getSimpleName(), p.getData());
+	}
+
+
+	public String getIDSNodeId() {
+		return idsNodeId;
+	}
+	private void setIDSNodeId(String idsNodeId) {
+		this.idsNodeId = idsNodeId;
 	}
 	
 	
