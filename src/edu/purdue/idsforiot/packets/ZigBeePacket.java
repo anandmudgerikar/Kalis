@@ -11,6 +11,7 @@ public class ZigBeePacket extends Packet {
 	private String origin;
 	private long seqno;
 	private String collectid;
+	private int RSSI;
 
 	public ZigBeePacket()
 	{
@@ -49,7 +50,7 @@ public class ZigBeePacket extends Packet {
 		// TODO: check again that the pieces from the payload are actually correct... spaces separate bytes, we need to interpret/parse those bytes!
 		// TODO: why was payload[8] used as src?
 		ZigBeePacket p = new ZigBeePacket(parts[2], parts[5], "" /* empty data for now */,
-										  parts[12].getBytes()[0], parts[0],
+										  Integer.parseInt(parts[12]), parts[0],
 										  payload[1].getBytes()[0], payload[4] + payload[5].substring(2), payload[6].getBytes()[0], payload[7]);
 		
 		return p;

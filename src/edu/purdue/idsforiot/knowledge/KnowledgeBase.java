@@ -19,6 +19,8 @@ public class KnowledgeBase {
 	private boolean isMultihop = false;
 	private boolean isSinglehop = false;
 	
+	private boolean isMobile = false;
+	
 	private Map<TrafficType, Float> trafficFrequency;
 	
 	
@@ -46,6 +48,14 @@ public class KnowledgeBase {
 	public void setSinglehop(boolean isSinglehop) {
 		this.isSinglehop = isSinglehop;
 		this.onKnowledgeChanged("isSinglehop");
+	}
+	
+	public boolean isMobile() {
+		return isMobile;
+	}
+	public void setMobile(boolean isMobile) {
+		this.isMobile = isMobile;
+		this.onKnowledgeChanged("isMobile");
 	}
 	
 	
