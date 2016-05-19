@@ -5,7 +5,6 @@ import java.util.*;
 
 import edu.purdue.idsforiot.modules.ModuleManager;
 import edu.purdue.idsforiot.packets.Packet;
-import edu.purdue.idsforiot.packets.WifiPacket;
 import edu.purdue.idsforiot.packets.PacketFactory;
 
 public class DataStore {

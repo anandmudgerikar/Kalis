@@ -13,10 +13,10 @@ public class EnvironmentSensingModule extends SensingModule {
 
 	@Override
 	public void onNewPacket(Packet p) {
-		if (p instanceof ZigBeePacket && !this.getKnowledgeBase().isMultihop())
-			this.getKnowledgeBase().setMultihop(true);
-		else if (p instanceof WifiPacket && !this.getKnowledgeBase().isSinglehop())
-			this.getKnowledgeBase().setSinglehop(true);
+		if (p instanceof ZigBeePacket)
+			this.getKnowledgeBase().setKnowledge("multihop", true);
+		else if (p instanceof WifiPacket)
+			this.getKnowledgeBase().setKnowledge("singlehop", true);
 	}
 
 }

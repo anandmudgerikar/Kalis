@@ -14,7 +14,7 @@ public class SYNFloodModule extends DetectionModule {
 	@Override
 	public boolean shouldBeActive(KnowledgeBase kb) {
 		// TODO: determine right threshold for activation/deactivation of this (in terms of packets/second)
-		return KnowledgeBase.getInstance().getTrafficFrequency(TrafficType.WiFiSYN) >= 1;
+		return kb.getTrafficFrequency(TrafficType.WiFiSYN) >= 1;
 	}
 
 	@Override

@@ -3,17 +3,20 @@
 ### TO-DOs ###
 
 Immediate items to do:
-* Check all the TODOs in the Java code and in the TelosB code and get them all done
+
+* Collect related work on IDSes for traditional/Wifi networks and for WSNs
+* Investigate how to determine neighbor lists for overheard nodes
+* Find good example of what our system would be good at
 
 
 To-do items for next iteration:
-* Implement a couple more Modules for different attacks (Wifi vs ZigBee, ...).
-* Add Network Profiling module for traffic load, stats, ...
+
+* Make modules take parameters from the configuration file
+
 
 
 
 Done:
-
 
 * Make sure that we can listen to REAL-TIME, UNLIMITED AMOUNTS of WiFi traffic
 * Remove need for full package name in initial config file and simply add that string in front when you are about to use Reflection to load the module class.
@@ -36,3 +39,5 @@ Done:
 * Figure out SoC for DataStore and Modules wrt queues
 * Have each module expose its characteristics statically (for now, e.g., "IsForMultihop" and "IsForSinglehop" could be static bool properties). The KnowledgeBase component then should be able to iterate over all modules in the edu.purdue.idsforiot.modules package and select only those that have the right characteristics for the current environment.
 * Environmental Sensing component
+* Implement a couple more Modules for different attacks (Wifi vs ZigBee, ...).
+* Add Network Profiling module for traffic load, stats, ...
