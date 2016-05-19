@@ -22,7 +22,7 @@ public abstract class SensingModule extends Module {
 	public SensingModule(ModuleManager mgr, KnowledgeBase kb) {
 		super(mgr);
 		this.kb = kb;
-		kb.setSinglehop(true);
+		kb.setKnowledge("Topology", "Single Hop");
 		this.rssiHistory = new HashMap<Edge,Integer>();
 	}
 
@@ -31,11 +31,6 @@ public abstract class SensingModule extends Module {
 		return this.kb;
 	}
 	
-	protected void checkTopology()
-	{
-		int trav_len = 0;
-		
-	}
 	
 	@Override
 	public void onNewPacket(Packet p) {
@@ -49,7 +44,7 @@ public abstract class SensingModule extends Module {
 			if(rssiHistory.get(edge) != ((ZigBeePacket) p).getRSSI()) // mobility
 			{
 				this.rssiHistory.put(edge,((ZigBeePacket) p).getRSSI());
-				kb.setMobile(true);
+				kb.setKnowledge("Mobility", "true");
 			}	
 		}
 		else // new edge
@@ -61,7 +56,7 @@ public abstract class SensingModule extends Module {
 		        Edge temp = (Edge) iter.next();
 		        if(temp.getDest() != p.getDst())
 		        {
-		        	kb.setMultihop(true);
+		        	kb.setKnowledge("Topology", "Multi Hop");
 		        }
 		      }
 		    

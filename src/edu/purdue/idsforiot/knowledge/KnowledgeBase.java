@@ -16,9 +16,9 @@ public class KnowledgeBase {
 		return instance;
 	}
 
-	private boolean isMultihop = false;
-	private boolean isSinglehop = false;
-	private boolean isMobile = false;
+//	private boolean isMultihop = false;
+//	private boolean isSinglehop = false;
+//	private boolean isMobile = false;
 
 	private Map<TrafficType, Float> trafficFrequency;
 
@@ -94,15 +94,13 @@ public class KnowledgeBase {
 		return value != null ? Boolean.parseBoolean(value) : null;
 	}
 
-
-
-	public boolean isMobile() {
-		return isMobile;
-	}
-	public void setMobile(boolean isMobile) {
-		this.isMobile = isMobile;
-		this.onKnowledgeChanged("isMobile");
-	}
+//	public boolean isMobile() {
+//		return isMobile;
+//	}
+//	public void setMobile(boolean isMobile) {
+//		this.isMobile = isMobile;
+//		this.onKnowledgeChanged("isMobile");
+//	}
 
 
 	/* UTILITY METHODS for convenience */
