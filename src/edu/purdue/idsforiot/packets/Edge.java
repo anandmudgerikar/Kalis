@@ -15,4 +15,9 @@ public class Edge {
 	{
 		return this.dest;
 	}
+	
+	public String getSrc()
+	{
+		return this.source;
+	}
 }

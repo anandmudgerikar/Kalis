@@ -2,6 +2,7 @@ package edu.purdue.idsforiot.knowledge;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import edu.purdue.idsforiot.modules.ModuleManager;
 
@@ -21,11 +22,14 @@ public class KnowledgeBase {
 //	private boolean isMobile = false;
 
 	private Map<TrafficType, Float> trafficFrequency;
+	
+	private Map<String, Float> currICMPResponseFrequency; // we cant store this in knowgets as it is maintaned for each node
 
 	private Map<String, String> knowggets;
 
 	private KnowledgeBase() {
 		knowggets = new HashMap<String, String>();
+		currICMPResponseFrequency = new HashMap<String, Float>();
 	}
 
 	private void onKnowledgeChanged(String changedKnowledgePiece) {
@@ -114,4 +118,21 @@ public class KnowledgeBase {
 		this.setKnowledge("trafficFrequency." + trafficType.toString(), frequency);
 	}
 
+	// for per node Frequencies
+	public float getperNodeTrafficFrequency(TrafficType trafficType, String key) {
+		
+		if(currICMPResponseFrequency.containsKey(key))
+		return currICMPResponseFrequency.get(key);
+		else
+		return 0.0f;	
+	}
+	
+	public Set<String> getperNodes(TrafficType trafficType) {
+		return currICMPResponseFrequency.keySet();
+	}
+
+	public void setperNodeTrafficFrequency(TrafficType trafficType, String key, Float value) {
+		this.currICMPResponseFrequency.put(key, value);
+	}
+	
 }

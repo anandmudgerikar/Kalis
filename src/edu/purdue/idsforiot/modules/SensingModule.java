@@ -16,53 +16,19 @@ import edu.purdue.idsforiot.packets.Edge;
 public abstract class SensingModule extends Module {
 	
 	private KnowledgeBase kb;
-	private Map<Edge,Integer> rssiHistory;
 	
-
 	public SensingModule(ModuleManager mgr, KnowledgeBase kb) {
 		super(mgr);
 		this.kb = kb;
-		kb.setKnowledge("Topology", "Single Hop");
-		this.rssiHistory = new HashMap<Edge,Integer>();
+		
 	}
-
 
 	protected KnowledgeBase getKnowledgeBase() {
 		return this.kb;
 	}
 	
 	
-	@Override
-	public void onNewPacket(Packet p) {
-		if (!(p instanceof ZigBeePacket)) return;
-		
-		//recording RSSI values for all edges
-		Edge edge = new Edge(p.getSrc(),p.getDst());
-		
-		if(rssiHistory.containsKey(edge)) //if old edge
-		{
-			if(rssiHistory.get(edge) != ((ZigBeePacket) p).getRSSI()) // mobility
-			{
-				this.rssiHistory.put(edge,((ZigBeePacket) p).getRSSI());
-				kb.setKnowledge("Mobility", "true");
-			}	
-		}
-		else // new edge
-		{
-			//checking topology
-			Set<Edge> set = rssiHistory.keySet();
-		    Iterator<Edge> iter = set.iterator();
-		    while (iter.hasNext()) {
-		        Edge temp = (Edge) iter.next();
-		        if(temp.getDest() != p.getDst())
-		        {
-		        	kb.setKnowledge("Topology", "Multi Hop");
-		        }
-		      }
-		    
-		    this.rssiHistory.put(edge,((ZigBeePacket) p).getRSSI());
-		}
-	}
+	
 	
 }
 
