@@ -58,8 +58,7 @@ public class SelectiveForwardingModule extends DetectionModule {
 	
 	@Override
 	public boolean shouldBeActive(KnowledgeBase kb) {
-		Boolean mh = kb.getKnowledgeBoolean("multihop");
-		return mh != null && mh.booleanValue();
+		return kb.getKnowledgeBooleanOrFalse("multihop");
 	}
 
 

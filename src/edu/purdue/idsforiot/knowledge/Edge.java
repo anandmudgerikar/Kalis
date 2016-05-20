@@ -1,4 +1,4 @@
-package edu.purdue.idsforiot.packets;
+package edu.purdue.idsforiot.knowledge;
 
 public class Edge {
 

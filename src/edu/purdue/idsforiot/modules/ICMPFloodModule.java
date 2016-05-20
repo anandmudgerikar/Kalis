@@ -1,7 +1,5 @@
 package edu.purdue.idsforiot.modules;
 
-import java.util.Iterator;
-
 import edu.purdue.idsforiot.knowledge.KnowledgeBase;
 import edu.purdue.idsforiot.knowledge.TrafficType;
 import edu.purdue.idsforiot.packets.Packet;
@@ -15,12 +13,9 @@ public class ICMPFloodModule extends DetectionModule {
 
 	@Override
 	public boolean shouldBeActive(KnowledgeBase kb) {
-
-		Iterator<String> iter = kb.getperNodes(TrafficType.ICMPResponse).iterator();
-		while (iter.hasNext()) {
-			if ((kb.getperNodeTrafficFrequency(TrafficType.ICMPResponse, iter.next())) >= 1) {
+		for (String value : kb.getAllPerNodeTrafficFrequencies(TrafficType.ICMPReply).values()) {
+			if (Float.parseFloat(value) >= .8)
 				return true;
-			}
 		}
 		return false;
 	}
@@ -29,8 +24,8 @@ public class ICMPFloodModule extends DetectionModule {
 	public void onNewPacket(Packet p) {
 		if (!(p instanceof WifiPacket)) return;
 
-		if (KnowledgeBase.getInstance().getperNodeTrafficFrequency(TrafficType.ICMPResponse, p.getDst()) >= 1)
-			this.getManager().onDetection(this, "ICMP Flood", p.getDst(), p);
+		if (this.getManager().getKnowledgeBase().getTrafficFrequency(TrafficType.ICMPReply, p.getDst()) >= 1)
+			this.getManager().onDetection(this, "ICMP Flood on " + p.getDst(), "?", p);
 	}
 	
 }

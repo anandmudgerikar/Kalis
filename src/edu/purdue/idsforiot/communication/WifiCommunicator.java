@@ -5,14 +5,15 @@ import java.io.*;
 import edu.purdue.idsforiot.DataStore;
 import edu.purdue.idsforiot.packets.WifiPacket;
 
-public class WifiCommunicator implements Communicator {
+public class WifiCommunicator extends Communicator {
 
 	private static Process tcpdumpProcess;
 	private static BufferedReader tcpdumpStream;
 	
-	// TODO: what are the following 2 lines, and do we need them?
-	// private InputStream tcpInput;
-	// private boolean keepRunning = true;
+	public WifiCommunicator(DataStore dataStore) {
+		super(dataStore);
+	}
+	
 	
 	@Override
 	public void listen() {
@@ -32,7 +33,7 @@ public class WifiCommunicator implements Communicator {
 					WifiPacket p = WifiPacket.parseFromLive(rawLine);
 
 					// notify the DataStore
-					DataStore.getInstance().onNewPacket(p);
+					this.getDataStore().onNewPacket(p);
 				} catch (Exception ex) {
 					System.out.println("Exception in parsing wifi packet");
 					ex.printStackTrace();

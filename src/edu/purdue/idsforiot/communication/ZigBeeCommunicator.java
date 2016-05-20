@@ -8,14 +8,15 @@ import net.tinyos.packet.*;
 import net.tinyos.tools.PrintfMsg;
 import net.tinyos.util.*;
 
-public class ZigBeeCommunicator implements Communicator, MessageListener {
+public class ZigBeeCommunicator extends Communicator implements MessageListener {
 
 	private MoteIF moteIF;
 	private String source;
 
 	private String nextline = "";
 
-	public ZigBeeCommunicator(String source) {
+	public ZigBeeCommunicator(DataStore dataStore, String source) {
+		super(dataStore);
 		this.source = source;
 	}
 
@@ -57,7 +58,7 @@ public class ZigBeeCommunicator implements Communicator, MessageListener {
 
 				// notify the DataStore
 				System.out.println("New Packet: Notifying the Data Store");
-				DataStore.getInstance().onNewPacket(p);
+				this.getDataStore().onNewPacket(p);
 				nextline = "";
 			}
 		}

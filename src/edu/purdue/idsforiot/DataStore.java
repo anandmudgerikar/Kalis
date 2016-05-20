@@ -3,24 +3,17 @@ package edu.purdue.idsforiot;
 import java.io.*;
 import java.util.*;
 
-import edu.purdue.idsforiot.modules.ModuleManager;
 import edu.purdue.idsforiot.packets.Packet;
 import edu.purdue.idsforiot.packets.PacketFactory;
 
 public class DataStore {
 
-    // SINGLETON pattern
-    private static DataStore instance = new DataStore();
-
-    public static DataStore getInstance() {
-        if (instance == null)
-            instance = new DataStore();
-        return instance;
-    }
-
+	private IDS ids;
+	
     private Map<String, List<Packet>> trafficHistory;
 
-    private DataStore() {
+    public DataStore(IDS ids) {
+    	this.ids = ids;
         // initializing the queues
         this.trafficHistory = new HashMap<String, List<Packet>>();
     }
@@ -84,7 +77,7 @@ public class DataStore {
         
         // notify the Modules
         System.out.println("New Packet: Notifying the Module Manager");
-        ModuleManager.getInstance().onNewPacket(p);
+        this.ids.getModuleManager().onNewPacket(p);
     }
     
     

@@ -1,34 +1,27 @@
 package edu.purdue.idsforiot.knowledge;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.NavigableMap;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
-import edu.purdue.idsforiot.modules.ModuleManager;
+import edu.purdue.idsforiot.IDS;
 
 public class KnowledgeBase {
 
-	// SINGLETON pattern
-	private static KnowledgeBase instance = new KnowledgeBase();
-	public static KnowledgeBase getInstance() {
-		if (instance == null)
-			instance = new KnowledgeBase();
-		return instance;
-	}
+	private IDS ids;
+	private NavigableMap<String, String> knowggets;
 
-	private Map<String, String> knowggets;
-	private Map<String, Float> currICMPResponseFrequency; // we cant store this in knowgets as it is maintaned for each node
-
-	private KnowledgeBase() {
-		knowggets = new HashMap<String, String>();
+	public KnowledgeBase(IDS ids) {
+		this.ids = ids;
+		knowggets = new TreeMap<String, String>();
 	}
 
 	private void onKnowledgeChanged(String changedKnowledgePiece) {
-		ModuleManager.getInstance().updateModules(this, changedKnowledgePiece);
+		this.ids.getModuleManager().updateModules(this, changedKnowledgePiece);
 	}
 
 	private String composeKey(String label, String creator, String entity) {
-		return (creator != null ? creator : ModuleManager.getInstance().getIDSNodeId()) + "$" + label
+		return (creator != null ? creator : this.ids.getIDSNodeId()) + "$" + label
 				+ (entity != null ? "@" + entity : "");
 	}
 	
@@ -58,17 +51,22 @@ public class KnowledgeBase {
 		String key = composeKey(label, creator, entity);
 		return this.knowggets.getOrDefault(key, null);
 	}
+	
+
+	public SortedMap<String, String> getRawKnowledgeByPrefix(String prefix) {
+		return this.knowggets.subMap(prefix, prefix + Character.MAX_VALUE);
+	}
+	
+	
 
 	/* BASIC KNOWLEDGE GETTERS for primitive types */
 
 	public Integer getKnowledgeInteger(String label) {
 		return this.getKnowledgeInteger(label, null, null);
 	}
-
 	public Integer getKnowledgeInteger(String label, String creator) {
 		return this.getKnowledgeInteger(label, creator, null);
 	}
-
 	public Integer getKnowledgeInteger(String label, String creator, String entity) {
 		String value = this.getRawKnowledge(label, creator, entity);
 		return value != null ? Integer.parseInt(value) : null;
@@ -77,24 +75,24 @@ public class KnowledgeBase {
 	public Float getKnowledgeFloat(String label) {
 		return this.getKnowledgeFloat(label, null, null);
 	}
-
 	public Float getKnowledgeFloat(String label, String creator) {
 		return this.getKnowledgeFloat(label, creator, null);
 	}
-
 	public Float getKnowledgeFloat(String label, String creator, String entity) {
 		String value = this.getRawKnowledge(label, creator, entity);
 		return value != null ? Float.parseFloat(value) : null;
 	}
 
+	public boolean getKnowledgeBooleanOrFalse(String label) {
+		Boolean b = this.getKnowledgeBoolean(label, null, null);
+		return b != null ? b.booleanValue() : false;
+	}
 	public Boolean getKnowledgeBoolean(String label) {
 		return this.getKnowledgeBoolean(label, null, null);
 	}
-
 	public Boolean getKnowledgeBoolean(String label, String creator) {
 		return this.getKnowledgeBoolean(label, creator, null);
 	}
-
 	public Boolean getKnowledgeBoolean(String label, String creator, String entity) {
 		String value = this.getRawKnowledge(label, creator, entity);
 		return value != null ? Boolean.parseBoolean(value) : null;
@@ -111,6 +109,10 @@ public class KnowledgeBase {
 		Float f = this.getKnowledgeFloat("trafficFrequency." + trafficType.toString(), null, entity);
 		return f != null ? f : 0.0F;
 	}
+	
+	public SortedMap<String, String> getAllPerNodeTrafficFrequencies(TrafficType trafficType) {
+		return this.getRawKnowledgeByPrefix(this.composeKey("trafficFrequency." + trafficType.toString(), null, null));
+	}
 
 	public void setTrafficFrequency(TrafficType trafficType, float frequency) {
 		this.setTrafficFrequency(trafficType, frequency, null);
@@ -118,21 +120,6 @@ public class KnowledgeBase {
 	public void setTrafficFrequency(TrafficType trafficType, float frequency, String entity) {
 		this.setKnowledge("trafficFrequency." + trafficType.toString(), frequency, null, entity);
 	}
-
-	// for per node Frequencies
-	public float getperNodeTrafficFrequency(TrafficType trafficType, String key) {
-
-		if (currICMPResponseFrequency.containsKey(key))
-			return currICMPResponseFrequency.get(key);
-		else
-			return 0.0f;
-	}
-
-	public Set<String> getperNodes(TrafficType trafficType) {
-		return currICMPResponseFrequency.keySet();
-	}
-	public void setperNodeTrafficFrequency(TrafficType trafficType, String key, Float value) {
-		this.currICMPResponseFrequency.put(key, value);
-	}
+	
 
 }

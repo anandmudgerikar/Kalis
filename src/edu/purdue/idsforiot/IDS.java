@@ -2,6 +2,7 @@ package edu.purdue.idsforiot;
 
 import edu.purdue.idsforiot.communication.WifiCommunicator;
 import edu.purdue.idsforiot.communication.ZigBeeCommunicator;
+import edu.purdue.idsforiot.knowledge.KnowledgeBase;
 import edu.purdue.idsforiot.modules.ModuleManager;
 
 public class IDS {
@@ -31,19 +32,46 @@ public class IDS {
 	}
 	
 	
+	private ModuleManager moduleManager;
+	private KnowledgeBase kb;
+	private DataStore dataStore;
+
+	private String idsNodeId;
+	
+	
 	public void start(String source, String tracefile) throws IDSforIoTException {
-		ModuleManager.getInstance().start();
+		this.setIDSNodeId(java.util.UUID.randomUUID().toString());
+		this.dataStore = new DataStore(this);
+		this.kb = new KnowledgeBase(this);
+		this.moduleManager = new ModuleManager(this);
+		this.moduleManager.start();
 		
 		if (tracefile.equals("")) {
 			// create Communicators to intercept packets and start listening for live packets
-			ZigBeeCommunicator zigbeecommunicator = new ZigBeeCommunicator(source);
-			WifiCommunicator wificommunicator = new WifiCommunicator();
+			ZigBeeCommunicator zigbeecommunicator = new ZigBeeCommunicator(this.dataStore, source);
+			WifiCommunicator wificommunicator = new WifiCommunicator(this.dataStore);
 			zigbeecommunicator.listen();
 			wificommunicator.listen();
 		} else {
 			// replay a trace
-			DataStore.getInstance().replayTrace(tracefile);
+			this.dataStore.replayTrace(tracefile);
 		}
+	}
+
+
+	public String getIDSNodeId() {
+		return idsNodeId;
+	}
+	private void setIDSNodeId(String idsNodeId) {
+		this.idsNodeId = idsNodeId;
+	}
+
+
+	public KnowledgeBase getKnowledgeBase() {
+		return this.kb;
+	}
+	public ModuleManager getModuleManager() {
+		return this.moduleManager;
 	}
 	
 }
