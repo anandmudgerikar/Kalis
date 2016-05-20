@@ -9,12 +9,12 @@ import edu.purdue.idsforiot.knowledge.KnowledgeBase;
 import edu.purdue.idsforiot.packets.Packet;
 import edu.purdue.idsforiot.packets.ZigBeePacket;
 
-public class MultiHopSelectiveForwardingModule extends DetectionModule {
+public class SelectiveForwardingModule extends DetectionModule {
 
 	private Map<String, Queue<Packet>> queues;
 
 
-    public MultiHopSelectiveForwardingModule(ModuleManager mgr) {
+    public SelectiveForwardingModule(ModuleManager mgr) {
 		super(mgr);
 	}
     

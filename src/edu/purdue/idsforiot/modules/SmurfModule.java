@@ -5,7 +5,6 @@ import edu.purdue.idsforiot.knowledge.TrafficType;
 import edu.purdue.idsforiot.packets.Packet;
 import edu.purdue.idsforiot.packets.WifiPacket;
 
-import java.util.Set;
 import java.util.Iterator;
 
 public class SmurfModule extends DetectionModule {
@@ -18,7 +17,8 @@ public class SmurfModule extends DetectionModule {
 	public boolean shouldBeActive(KnowledgeBase kb) {
 		// TODO: determine right threshold for activation/deactivation of this (in terms of packets/second)
 
-		if(kb.getKnowledgeInteger(("MultiHop")) == 1)
+		Boolean mh = kb.getKnowledgeBoolean("multihop");
+		if(mh != null && mh.booleanValue())
 		{
 			Iterator<String> iter = kb.getperNodes(TrafficType.ICMPResponse).iterator();
 

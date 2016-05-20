@@ -1,15 +1,15 @@
 package edu.purdue.idsforiot.packets;
 
 public class WifiPacket extends Packet {
+
+	private String protocol; // ICMP, TCP, UDP, ...
+	private String protocolType; // request, reply, ...
 	
-	public WifiPacket(String src, String dst, String data, String protocol, String protocol_type) {
+	public WifiPacket(String src, String dst, String data, String protocol, String protocolType) {
 		super(PacketTypes.WiFi, src, dst, data);
 		this.protocol = protocol;
-		this.protocol_type = protocol_type;
+		this.protocolType = protocolType;
 	}
-
-	private String protocol; //ICMP,TCP,UDP
-	private String protocol_type; //response,request
 	
 	/// CSV FORMAT: type, timestamp, src, dst, data
 	public static WifiPacket parseFromLog(String raw) {
@@ -28,7 +28,7 @@ public class WifiPacket extends Packet {
 
 	@Override
 	public String toString() {
-		return "Wifi " + super.toString() + " [" + this.protocol + " " + this.protocol_type + "]";
+		return "Wifi " + super.toString() + " [" + this.protocol + " " + this.protocolType + "]";
 	}
 	
 	public String getProtocol() {
@@ -39,9 +39,9 @@ public class WifiPacket extends Packet {
 	}
 	
 	public String getProtocolType() {
-		return protocol_type;
+		return protocolType;
 	}
-	public void setProtocolType(String protocol_type) {
-		this.protocol_type = protocol_type;
+	public void setProtocolType(String protocolType) {
+		this.protocolType = protocolType;
 	}
 }

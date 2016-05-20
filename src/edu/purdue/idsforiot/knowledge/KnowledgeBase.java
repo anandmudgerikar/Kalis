@@ -10,40 +10,38 @@ public class KnowledgeBase {
 
 	// SINGLETON pattern
 	private static KnowledgeBase instance = new KnowledgeBase();
-
 	public static KnowledgeBase getInstance() {
 		if (instance == null)
 			instance = new KnowledgeBase();
 		return instance;
 	}
 
-//	private boolean isMultihop = false;
-//	private boolean isSinglehop = false;
-//	private boolean isMobile = false;
-
-	private Map<TrafficType, Float> trafficFrequency;
-	
-	private Map<String, Float> currICMPResponseFrequency; // we cant store this in knowgets as it is maintaned for each node
-
 	private Map<String, String> knowggets;
+	private Map<String, Float> currICMPResponseFrequency; // we cant store this in knowgets as it is maintaned for each node
 
 	private KnowledgeBase() {
 		knowggets = new HashMap<String, String>();
-		currICMPResponseFrequency = new HashMap<String, Float>();
 	}
 
 	private void onKnowledgeChanged(String changedKnowledgePiece) {
 		ModuleManager.getInstance().updateModules(this, changedKnowledgePiece);
 	}
 
+	private String composeKey(String label, String creator, String entity) {
+		return (creator != null ? creator : ModuleManager.getInstance().getIDSNodeId()) + "$" + label
+				+ (entity != null ? "@" + entity : "");
+	}
+	
 	public <T> void setKnowledge(String label, T value) {
 		this.setKnowledge(label, value, null, null);
 	}
+
 	public <T> void setKnowledge(String label, T value, String creator) {
 		this.setKnowledge(label, value, creator, null);
 	}
+
 	public <T> void setKnowledge(String label, T value, String creator, String entity) {
-		String key = (entity != null ? entity : ModuleManager.getInstance().getIDSNodeId()) + "$" + label + (entity != null ? "@" + entity : "");
+		String key = composeKey(label, creator, entity);
 		String newValue = value.toString();
 		String oldValue = this.knowggets.getOrDefault(key, null);
 		if (oldValue == null || oldValue != newValue) {
@@ -55,22 +53,22 @@ public class KnowledgeBase {
 	public String getRawKnowledge(String label, String creator) {
 		return this.getRawKnowledge(label, creator, null);
 	}
+
 	public String getRawKnowledge(String label, String creator, String entity) {
-		String key = (entity != null ? entity : ModuleManager.getInstance().getIDSNodeId()) + "$" + label + (entity != null ? "@" + entity : "");
+		String key = composeKey(label, creator, entity);
 		return this.knowggets.getOrDefault(key, null);
 	}
-
-
-
 
 	/* BASIC KNOWLEDGE GETTERS for primitive types */
 
 	public Integer getKnowledgeInteger(String label) {
 		return this.getKnowledgeInteger(label, null, null);
 	}
+
 	public Integer getKnowledgeInteger(String label, String creator) {
 		return this.getKnowledgeInteger(label, creator, null);
 	}
+
 	public Integer getKnowledgeInteger(String label, String creator, String entity) {
 		String value = this.getRawKnowledge(label, creator, entity);
 		return value != null ? Integer.parseInt(value) : null;
@@ -79,9 +77,11 @@ public class KnowledgeBase {
 	public Float getKnowledgeFloat(String label) {
 		return this.getKnowledgeFloat(label, null, null);
 	}
+
 	public Float getKnowledgeFloat(String label, String creator) {
 		return this.getKnowledgeFloat(label, creator, null);
 	}
+
 	public Float getKnowledgeFloat(String label, String creator, String entity) {
 		String value = this.getRawKnowledge(label, creator, entity);
 		return value != null ? Float.parseFloat(value) : null;
@@ -90,49 +90,49 @@ public class KnowledgeBase {
 	public Boolean getKnowledgeBoolean(String label) {
 		return this.getKnowledgeBoolean(label, null, null);
 	}
+
 	public Boolean getKnowledgeBoolean(String label, String creator) {
 		return this.getKnowledgeBoolean(label, creator, null);
 	}
+
 	public Boolean getKnowledgeBoolean(String label, String creator, String entity) {
 		String value = this.getRawKnowledge(label, creator, entity);
 		return value != null ? Boolean.parseBoolean(value) : null;
 	}
 
-//	public boolean isMobile() {
-//		return isMobile;
-//	}
-//	public void setMobile(boolean isMobile) {
-//		this.isMobile = isMobile;
-//		this.onKnowledgeChanged("isMobile");
-//	}
-
-
+	
+	
 	/* UTILITY METHODS for convenience */
 
 	public float getTrafficFrequency(TrafficType trafficType) {
-		Float f = this.getKnowledgeFloat("trafficFrequency." + trafficType.toString());
+		return this.getTrafficFrequency(trafficType, null);
+	}
+	public float getTrafficFrequency(TrafficType trafficType, String entity) {
+		Float f = this.getKnowledgeFloat("trafficFrequency." + trafficType.toString(), null, entity);
 		return f != null ? f : 0.0F;
 	}
 
 	public void setTrafficFrequency(TrafficType trafficType, float frequency) {
-		this.setKnowledge("trafficFrequency." + trafficType.toString(), frequency);
+		this.setTrafficFrequency(trafficType, frequency, null);
+	}
+	public void setTrafficFrequency(TrafficType trafficType, float frequency, String entity) {
+		this.setKnowledge("trafficFrequency." + trafficType.toString(), frequency, null, entity);
 	}
 
 	// for per node Frequencies
 	public float getperNodeTrafficFrequency(TrafficType trafficType, String key) {
-		
-		if(currICMPResponseFrequency.containsKey(key))
-		return currICMPResponseFrequency.get(key);
+
+		if (currICMPResponseFrequency.containsKey(key))
+			return currICMPResponseFrequency.get(key);
 		else
-		return 0.0f;	
+			return 0.0f;
 	}
-	
+
 	public Set<String> getperNodes(TrafficType trafficType) {
 		return currICMPResponseFrequency.keySet();
 	}
-
 	public void setperNodeTrafficFrequency(TrafficType trafficType, String key, Float value) {
 		this.currICMPResponseFrequency.put(key, value);
 	}
-	
+
 }

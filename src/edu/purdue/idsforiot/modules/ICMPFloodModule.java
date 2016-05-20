@@ -15,25 +15,22 @@ public class ICMPFloodModule extends DetectionModule {
 
 	@Override
 	public boolean shouldBeActive(KnowledgeBase kb) {
-		// TODO: determine right threshold for activation/deactivation of this (in terms of packets/second)	
-		
-			Iterator<String> iter = kb.getperNodes(TrafficType.ICMPResponse).iterator();	
-			while(iter.hasNext())
-			{
-				if((kb.getperNodeTrafficFrequency(TrafficType.ICMPResponse, iter.next())) >= 1)
-				{
-					return true;
-				}
+
+		Iterator<String> iter = kb.getperNodes(TrafficType.ICMPResponse).iterator();
+		while (iter.hasNext()) {
+			if ((kb.getperNodeTrafficFrequency(TrafficType.ICMPResponse, iter.next())) >= 1) {
+				return true;
 			}
-			return false;		
+		}
+		return false;
 	}
-	
+
 	@Override
 	public void onNewPacket(Packet p) {
 		if (!(p instanceof WifiPacket)) return;
-		
-		// TODO: is this (i.e., when more than N SYN pkts/sec, just alert) the best way to alert of SYN flood attacks?
+
 		if (KnowledgeBase.getInstance().getperNodeTrafficFrequency(TrafficType.ICMPResponse, p.getDst()) >= 1)
 			this.getManager().onDetection(this, "ICMP Flood", p.getDst(), p);
 	}
+	
 }
