@@ -11,8 +11,7 @@ public class SYNFloodModule extends DetectionModule {
 		super(mgr);
 	}
 
-	@Override
-	public boolean shouldBeActive(KnowledgeBase kb) {
+	public static boolean shouldBeActive(KnowledgeBase kb) {
 		return kb.getTrafficFrequency(TrafficType.TCPSYN) >= .5;
 	}
 

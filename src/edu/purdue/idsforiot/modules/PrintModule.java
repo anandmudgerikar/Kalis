@@ -13,8 +13,7 @@ public class PrintModule extends DetectionModule {
 		System.out.println(p);
 	}
 	
-	@Override
-	public boolean shouldBeActive(KnowledgeBase kb) {
+	public static boolean shouldBeActive(KnowledgeBase kb) {
 		return true;
 	}
 

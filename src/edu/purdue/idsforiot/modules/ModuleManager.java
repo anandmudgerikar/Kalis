@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.lang.Class;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import edu.purdue.idsforiot.IDS;
@@ -15,23 +16,21 @@ import edu.purdue.idsforiot.packets.Packet;
 
 public final class ModuleManager {
 
-	private Map<String, Module> allModules;
-	private Map<String, Module> activeDetectionModules;
-	private Map<String, Module> activeSensingModules;
-	private Map<String, Module> inactiveModules;
+	private Map<String, Class<Module>> allModules;
+	private Map<String, DetectionModule> activeDetectionModules;
+	private Map<String, SensingModule> activeSensingModules;
 
 	private IDS ids;
 
 	public ModuleManager(IDS ids) {
 		this.ids = ids;
-		this.allModules = new HashMap<String, Module>();
-		this.activeDetectionModules = new HashMap<String, Module>();
-		this.activeSensingModules = new HashMap<String, Module>();
-		this.inactiveModules = new HashMap<String, Module>();
+		this.allModules = new HashMap<String, Class<Module>>();
+		this.activeDetectionModules = new HashMap<String, DetectionModule>();
+		this.activeSensingModules = new HashMap<String, SensingModule>();
 	}
 
 	public void start() throws IDSforIoTException {
-		this.loadAllModules();
+		this.discoverAllModules();
 
 		try {
 			// read from config file which modules to start
@@ -40,7 +39,8 @@ public final class ModuleManager {
 			while ((line = br.readLine()) != null) {
 				if (line.equals("") || line.startsWith("//"))
 					continue; // skip comments
-				this.activateModule(line);
+				Class<Module> moduleClass = this.allModules.getOrDefault(line, null);
+				if (moduleClass != null) this.activateModule(moduleClass);
 			}
 			br.close();
 
@@ -49,101 +49,85 @@ public final class ModuleManager {
 		}
 	}
 
-	/// Instantiate all modules, initially inactive
-	private void loadAllModules() throws IDSforIoTException {
-		for (Class<?> modclass : Utils.getClassesInPackage(this.getClass().getPackage().getName())) {
+	/// Discover all modules, initially inactive
+	@SuppressWarnings("unchecked")
+	private void discoverAllModules() throws IDSforIoTException {
+		for (Class<?> moduleClass : Utils.getClassesInPackage(this.getClass().getPackage().getName())) {
 			// only go through non-abstract subclasses of Module
-			if (Module.class.isAssignableFrom(modclass) && !Modifier.isAbstract(modclass.getModifiers()))
-				this.loadModule(modclass);
+			if (Module.class.isAssignableFrom(moduleClass) && !Modifier.isAbstract(moduleClass.getModifiers()))
+				this.allModules.put(moduleClass.getSimpleName(), (Class<Module>)moduleClass);
 		}
 	}
 
-	private Module loadModule(Class<?> moduleClass) throws IDSforIoTException {
-		Module module = null;
-		try {
-			if (DetectionModule.class.isAssignableFrom(moduleClass)) {
-				// it is a DetectionModule
-				module = (Module) moduleClass.getConstructor(this.getClass()).newInstance(this);
-			} else if (SensingModule.class.isAssignableFrom(moduleClass)) {
-				// it is a SensingModule
-				module = (Module) moduleClass.getConstructor(this.getClass(), KnowledgeBase.class).newInstance(this, this.ids.getKnowledgeBase());
-			} else {
-				// it is something else (wrong!)
-				throw new IDSforIoTException("Module " + moduleClass.getSimpleName()
-						+ " is neither Detection nor Sensing module, and cannot be initialized.");
-			}
-			this.allModules.put(moduleClass.getSimpleName(), module);
-			this.inactiveModules.put(moduleClass.getSimpleName(), module);
-
-		} catch (IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException
-				| InstantiationException | IllegalAccessException e) {
-			System.out.println(moduleClass.getSimpleName() + ": could not load Module.");
-			e.printStackTrace();
-			throw new IDSforIoTException(e);
-		}
-
-		return module;
-	}
-
-	private Module activateModule(String moduleName) {
-		if (!this.inactiveModules.containsKey(moduleName))
-			return null;
-		Module module = this.inactiveModules.get(moduleName);
-		return this.activateModule(module);
-	}
-
-	private Module activateModule(Module module) {
+	private void activateModule(Class<Module> moduleClass) {
 		// check if module is already active
-		String moduleName = module.getClass().getSimpleName();
-		if (!this.inactiveModules.containsKey(moduleName))
-			return module;
+		String moduleName = moduleClass.getSimpleName();
+		if (this.activeSensingModules.containsKey(moduleName) || this.activeDetectionModules.containsKey(moduleName)) {
+			System.out.println("Module " + moduleName + " is already active");
+		} else {
+			// load the Module from class
+			Module module = null;
+			try {
+				if (DetectionModule.class.isAssignableFrom(moduleClass)) {
+					// it is a DetectionModule
+					module = (Module) moduleClass.getConstructor(this.getClass()).newInstance(this);
+					this.activeDetectionModules.put(moduleName, (DetectionModule)module);
+				} else if (SensingModule.class.isAssignableFrom(moduleClass)) {
+					// it is a SensingModule
+					module = (Module) moduleClass.getConstructor(this.getClass(), KnowledgeBase.class).newInstance(this, this.ids.getKnowledgeBase());
+					this.activeSensingModules.put(moduleName, (SensingModule)module);
+				} else {
+					// it is something else (wrong!)
+					throw new IDSforIoTException("Module " + moduleName + " is neither Detection nor Sensing module, and cannot be initialized.");
+				}
+				module.start();
+				System.out.println("Activated module " + moduleName);
 
-		module.start();
-		this.inactiveModules.remove(moduleName);
-		if (module instanceof DetectionModule)
-			this.activeDetectionModules.put(moduleName, module);
-		else
-			this.activeSensingModules.put(moduleName, module);
-
-		System.out.println("Activating module " + module.getClass().getSimpleName());
-
-		return module;
+			} catch (IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IDSforIoTException e) {
+				System.out.println(moduleName + ": could not load Module.");
+				e.printStackTrace();
+				// throw new IDSforIoTException(e);
+			}
+		}
 	}
 
-	private Module deactivateModule(Module module) {
+	private void deactivateModule(String moduleName) {
 		// check if module is already inactive
-		String moduleName = module.getClass().getSimpleName();
-		if (this.inactiveModules.containsKey(moduleName))
-			return module;
-
-		this.activeDetectionModules.remove(moduleName);
-		this.activeSensingModules.remove(moduleName);
-		this.inactiveModules.put(moduleName, module);
-
-		System.out.println("Deactivating module " + module.getClass().getSimpleName());
-
-		return module;
+		if (this.activeSensingModules.containsKey(moduleName) || this.activeDetectionModules.containsKey(moduleName)) {
+			this.activeDetectionModules.remove(moduleName);
+			this.activeSensingModules.remove(moduleName);
+			
+			// suggests garbage collection (to free memory)
+			System.gc();
+	
+			System.out.println("Deactivated module " + moduleName);
+		}
 	}
 
-	/// Leverages info from KnowledgeBase to update which Modules are
-	/// activated/deactivated
+	/// Leverages info from KnowledgeBase to update which Modules are activated/deactivated
 	public void updateModules(KnowledgeBase kb, String changedKnowledgePiece) {
 		// iterate over all DetectionModules
-		for (Module m : this.allModules.values()) {
-			if (m instanceof DetectionModule) {
-				// is this module relevant according to current KB?
-				if (((DetectionModule) m).shouldBeActive(kb)) {
-					this.activateModule(m);
-				} else {
-					this.deactivateModule(m);
+		for (Class<Module> moduleClass : this.allModules.values()) {
+			if (DetectionModule.class.isAssignableFrom(moduleClass)) {
+				try {
+					// is this module relevant according to current KB?
+					Method sba = moduleClass.getMethod("shouldBeActive", KnowledgeBase.class);
+					boolean r = (boolean) sba.invoke(null, this.getKnowledgeBase());
+					if (r) {
+						this.activateModule(moduleClass);
+					} else {
+						this.deactivateModule(moduleClass.getSimpleName());
+					}
+				} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
 	}
 
 	public void onNewPacket(Packet p) {
-		// notify all active modules of the new packet, SensingModules first as
-		// they could change the active modules
+		// notify all active modules of the new packet, SensingModules first as they could change the active modules
 		for (Module m : this.activeSensingModules.values())
 			m.onNewPacket(p);
 		for (Module m : this.activeDetectionModules.values())

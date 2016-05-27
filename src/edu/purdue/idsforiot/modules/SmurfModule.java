@@ -11,8 +11,7 @@ public class SmurfModule extends DetectionModule {
 		super(mgr);
 	}
 
-	@Override
-	public boolean shouldBeActive(KnowledgeBase kb) {
+	public static boolean shouldBeActive(KnowledgeBase kb) {
 		if (!kb.getKnowledgeBooleanOrFalse("multihop"))
 			return false;
 

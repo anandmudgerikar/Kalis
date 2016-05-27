@@ -36,7 +36,7 @@ public class DataStore {
                 // notify but don't log (as we are already reading from a log)
                 long time_diff = prevPkt == null ? 0 : p.getTimestamp() - prevPkt.getTimestamp();
                 try {
-                   Thread.sleep(time_diff); //sleeping for appropriate time
+                   Thread.sleep(time_diff /* * 1000*/); //sleeping for appropriate time
                 } catch(InterruptedException ex) {
                    Thread.currentThread().interrupt();
                 }

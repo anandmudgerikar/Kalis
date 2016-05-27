@@ -11,8 +11,7 @@ public class ICMPFloodModule extends DetectionModule {
 		super(mgr);
 	}
 
-	@Override
-	public boolean shouldBeActive(KnowledgeBase kb) {
+	public static boolean shouldBeActive(KnowledgeBase kb) {
 		for (String value : kb.getAllPerNodeTrafficFrequencies(TrafficType.ICMPReply).values()) {
 			if (Float.parseFloat(value) >= .8)
 				return true;

@@ -1,7 +1,5 @@
 package edu.purdue.idsforiot.modules;
 
-import edu.purdue.idsforiot.knowledge.KnowledgeBase;
-
 public abstract class DetectionModule extends Module {
 
 	public DetectionModule(ModuleManager mgr) {
@@ -9,6 +7,6 @@ public abstract class DetectionModule extends Module {
 	}
 
 	
-	public abstract boolean shouldBeActive(KnowledgeBase kb);
+	// public abstract boolean shouldBeActive(KnowledgeBase kb);
 	
 }
