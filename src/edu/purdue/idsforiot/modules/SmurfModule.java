@@ -21,6 +21,9 @@ public class SmurfModule extends DetectionModule {
 		}
 		return false;
 	}
+	public static String[] subscribedKnowggets() {
+		return new String[] { "multihop", "trafficFrequency." + TrafficType.ICMPReply.toString() };
+	}
 
 	@Override
 	public void onNewPacket(Packet p) {

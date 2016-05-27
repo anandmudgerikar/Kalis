@@ -39,7 +39,14 @@ public class KnowledgeBase {
 		String oldValue = this.knowggets.getOrDefault(key, null);
 		if (oldValue == null || oldValue != newValue) {
 			this.knowggets.put(key, newValue);
-			this.onKnowledgeChanged(label);
+			
+			// notify change in knowledge for all levels of label (for multilevel knowggets)
+			StringBuilder l = new StringBuilder(label.length());
+			for (String labelPiece : label.split("\\.", -1)) {
+				l.append(labelPiece);
+				this.onKnowledgeChanged(l.toString());
+				l.append(".");
+			}
 		}
 	}
 

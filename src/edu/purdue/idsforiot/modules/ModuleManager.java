@@ -1,7 +1,9 @@
 package edu.purdue.idsforiot.modules;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.lang.Class;
 import java.lang.reflect.InvocationTargetException;
@@ -19,6 +21,8 @@ public final class ModuleManager {
 	private Map<String, Class<Module>> allModules;
 	private Map<String, DetectionModule> activeDetectionModules;
 	private Map<String, SensingModule> activeSensingModules;
+	
+	private Map<String, List<Class<Module>>> knowggetSubscriptions;
 
 	private IDS ids;
 
@@ -27,6 +31,7 @@ public final class ModuleManager {
 		this.allModules = new HashMap<String, Class<Module>>();
 		this.activeDetectionModules = new HashMap<String, DetectionModule>();
 		this.activeSensingModules = new HashMap<String, SensingModule>();
+		this.knowggetSubscriptions = new HashMap<String, List<Class<Module>>>();
 	}
 
 	public void start() throws IDSforIoTException {
@@ -52,10 +57,19 @@ public final class ModuleManager {
 	/// Discover all modules, initially inactive
 	@SuppressWarnings("unchecked")
 	private void discoverAllModules() throws IDSforIoTException {
-		for (Class<?> moduleClass : Utils.getClassesInPackage(this.getClass().getPackage().getName())) {
+		for (Class<?> c : Utils.getClassesInPackage(this.getClass().getPackage().getName())) {
 			// only go through non-abstract subclasses of Module
-			if (Module.class.isAssignableFrom(moduleClass) && !Modifier.isAbstract(moduleClass.getModifiers()))
-				this.allModules.put(moduleClass.getSimpleName(), (Class<Module>)moduleClass);
+			if (Module.class.isAssignableFrom(c) && !Modifier.isAbstract(c.getModifiers())) {
+				Class<Module> moduleClass = (Class<Module>)c;
+				this.allModules.put(moduleClass.getSimpleName(), moduleClass);
+				
+				// subscribe this Module to the Knowggets of interest (if any)
+				for (String k : this.getModuleSubscriptions(moduleClass)) {
+					if (!this.knowggetSubscriptions.containsKey(k))
+						this.knowggetSubscriptions.put(k, new ArrayList<Class<Module>>());
+					this.knowggetSubscriptions.get(k).add(moduleClass);
+				}
+			}
 		}
 	}
 
@@ -91,7 +105,9 @@ public final class ModuleManager {
 		}
 	}
 
-	private void deactivateModule(String moduleName) {
+	private void deactivateModule(Class<Module> moduleClass) {
+		String moduleName = moduleClass.getSimpleName();
+		
 		// check if module is already inactive
 		if (this.activeSensingModules.containsKey(moduleName) || this.activeDetectionModules.containsKey(moduleName)) {
 			this.activeDetectionModules.remove(moduleName);
@@ -107,24 +123,37 @@ public final class ModuleManager {
 	/// Leverages info from KnowledgeBase to update which Modules are activated/deactivated
 	public void updateModules(KnowledgeBase kb, String changedKnowledgePiece) {
 		// iterate over all DetectionModules
-		for (Class<Module> moduleClass : this.allModules.values()) {
+		for (Class<Module> moduleClass : this.knowggetSubscriptions.getOrDefault(changedKnowledgePiece, new ArrayList<Class<Module>>())) {
 			if (DetectionModule.class.isAssignableFrom(moduleClass)) {
-				try {
-					// is this module relevant according to current KB?
-					Method sba = moduleClass.getMethod("shouldBeActive", KnowledgeBase.class);
-					boolean r = (boolean) sba.invoke(null, this.getKnowledgeBase());
-					if (r) {
+				// is this module relevant according to current KB?
+				Boolean shouldBeActive = this.shouldModuleBeActive(moduleClass);
+				if (shouldBeActive != null) { // some Modules don't have conditions and don't change
+					if (shouldBeActive)
 						this.activateModule(moduleClass);
-					} else {
-						this.deactivateModule(moduleClass.getSimpleName());
-					}
-				} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					else
+						this.deactivateModule(moduleClass);
 				}
 			}
 		}
 	}
+		
+	private Boolean shouldModuleBeActive(Class<Module> moduleClass) {
+		try {
+			Method sba = moduleClass.getMethod("shouldBeActive", KnowledgeBase.class);
+			return (boolean) sba.invoke(null, this.getKnowledgeBase());
+		} catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+			return null;
+		}		
+	}
+	private String[] getModuleSubscriptions(Class<Module> moduleClass) {
+		try {
+			Method sk = moduleClass.getMethod("subscribedKnowggets");
+			return (String[]) sk.invoke(null);
+		} catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+			return new String[0];
+		}		
+	}
+	
 
 	public void onNewPacket(Packet p) {
 		// notify all active modules of the new packet, SensingModules first as they could change the active modules
@@ -136,8 +165,7 @@ public final class ModuleManager {
 
 	/// Called when an attack is detected, providing a packet as extra info
 	public void onDetection(Module module, String attackName, String suspect, Packet p) {
-		System.err.format("DETECTED: %s by Entity %s (Module %s) [%s]\n", attackName, suspect,
-				module.getClass().getSimpleName(), p.getData());
+		System.err.format("DETECTED: %s by Entity %s (Module %s) [%s]\n", attackName, suspect, module.getClass().getSimpleName(), p.getData());
 	}
 
 	public KnowledgeBase getKnowledgeBase() {

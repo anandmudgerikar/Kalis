@@ -18,6 +18,9 @@ public class ICMPFloodModule extends DetectionModule {
 		}
 		return false;
 	}
+	public static String[] subscribedKnowggets() {
+		return new String[] { "trafficFrequency." + TrafficType.ICMPReply.toString() };
+	}
 
 	@Override
 	public void onNewPacket(Packet p) {

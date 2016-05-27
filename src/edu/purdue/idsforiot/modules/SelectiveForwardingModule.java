@@ -14,6 +14,14 @@ public class SelectiveForwardingModule extends DetectionModule {
 	private Map<String, Queue<Packet>> queues;
 
 
+	public static boolean shouldBeActive(KnowledgeBase kb) {
+		return kb.getKnowledgeBooleanOrFalse("multihop");
+	}
+	public static String[] subscribedKnowggets() {
+		return new String[] { "multihop" };
+	}
+	
+
     public SelectiveForwardingModule(ModuleManager mgr) {
 		super(mgr);
 	}
@@ -55,10 +63,6 @@ public class SelectiveForwardingModule extends DetectionModule {
 	}
 
 	
-
-	public static boolean shouldBeActive(KnowledgeBase kb) {
-		return kb.getKnowledgeBooleanOrFalse("multihop");
-	}
 
 
 }

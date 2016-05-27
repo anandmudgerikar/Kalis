@@ -14,6 +14,9 @@ public class SYNFloodModule extends DetectionModule {
 	public static boolean shouldBeActive(KnowledgeBase kb) {
 		return kb.getTrafficFrequency(TrafficType.TCPSYN) >= .5;
 	}
+	public static String[] subscribedKnowggets() {
+		return new String[] { "trafficFrequency." + TrafficType.TCPSYN.toString() };
+	}
 
 	@Override
 	public void onNewPacket(Packet p) {
