@@ -23,11 +23,16 @@ public final class ModuleManager {
 	private Map<String, SensingModule> activeSensingModules;
 	
 	private Map<String, List<Class<Module>>> knowggetSubscriptions;
-
+	private boolean dynamicModuleMgmt;
+	
 	private IDS ids;
 
 	public ModuleManager(IDS ids) {
+		this(ids, true);
+	}
+	public ModuleManager(IDS ids, boolean dynamicModuleMgmt) {
 		this.ids = ids;
+		this.dynamicModuleMgmt = dynamicModuleMgmt;
 		this.allModules = new HashMap<String, Class<Module>>();
 		this.activeDetectionModules = new HashMap<String, DetectionModule>();
 		this.activeSensingModules = new HashMap<String, SensingModule>();
@@ -51,6 +56,12 @@ public final class ModuleManager {
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		
+		if (!dynamicModuleMgmt) {
+			// activate all modules
+			for(Class<Module> moduleClass : this.allModules.values())
+				this.activateModule(moduleClass);
 		}
 	}
 
@@ -122,6 +133,10 @@ public final class ModuleManager {
 
 	/// Leverages info from KnowledgeBase to update which Modules are activated/deactivated
 	public void updateModules(KnowledgeBase kb, String changedKnowledgePiece) {
+		if (!dynamicModuleMgmt) {
+			return;
+		}
+		
 		// iterate over all DetectionModules
 		for (Class<Module> moduleClass : this.knowggetSubscriptions.getOrDefault(changedKnowledgePiece, new ArrayList<Class<Module>>())) {
 			if (DetectionModule.class.isAssignableFrom(moduleClass)) {

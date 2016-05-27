@@ -38,12 +38,15 @@ public class IDS {
 
 	private String idsNodeId;
 	
-	
+
 	public void start(String source, String tracefile) throws IDSforIoTException {
+		this.start(source, tracefile, true);
+	}
+	public void start(String source, String tracefile, boolean dynamicModuleMgmt) throws IDSforIoTException {
 		this.setIDSNodeId(java.util.UUID.randomUUID().toString());
 		this.dataStore = new DataStore(this);
 		this.kb = new KnowledgeBase(this);
-		this.moduleManager = new ModuleManager(this);
+		this.moduleManager = new ModuleManager(this, dynamicModuleMgmt);
 		this.moduleManager.start();
 		
 		if (tracefile.equals("")) {
