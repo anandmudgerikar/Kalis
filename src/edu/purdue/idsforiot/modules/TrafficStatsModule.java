@@ -62,8 +62,8 @@ public class TrafficStatsModule extends SensingModule {
 		if (Math.abs(currFreq - currRecordedFreq) >= CHANGE_THRESH)
 			this.getKnowledgeBase().setTrafficFrequency(type, currFreq);
 
-		// keep per-node stats (ICMP Echo Reply only for now)
-		if (type == TrafficType.ICMPReply) {
+		// keep per-node stats (ICMP Echo Reply and ZigbeeCTP for now)
+		if (type == TrafficType.ICMPReply || type == TrafficType.ZigBeeCTP) {
 			int pernodecount = this.getCurrPerNodeFrequencyOrDefault(type, p.getDst()) + 1;
 			setCurrPerNodeFrequency(type, p.getDst(), this.getCurrPerNodeFrequencyOrDefault(type, p.getDst()) + 1);
 

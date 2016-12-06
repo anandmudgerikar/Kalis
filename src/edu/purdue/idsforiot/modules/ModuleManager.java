@@ -39,7 +39,7 @@ public final class ModuleManager {
 		this.knowggetSubscriptions = new HashMap<String, List<Class<Module>>>();
 	}
 
-	public void start() throws IDSforIoTException {
+	public void start() throws IDSforIoTException, InvocationTargetException {
 		this.discoverAllModules();
 
 		try {
@@ -49,14 +49,15 @@ public final class ModuleManager {
 			while ((line = br.readLine()) != null) {
 				if (line.equals("") || line.startsWith("//"))
 					continue; // skip comments
-				Class<Module> moduleClass = this.allModules.getOrDefault(line, null);
+				//Class<Module> moduleClass = this.allModules.getOrDefault(line, null);
+				Class<Module> moduleClass = this.allModules.get(line);
 				if (moduleClass != null) this.activateModule(moduleClass);
 			}
 			br.close();
 
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		} 
 		
 		if (!dynamicModuleMgmt) {
 			// activate all modules

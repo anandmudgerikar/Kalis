@@ -1,5 +1,7 @@
 package edu.purdue.idsforiot;
 
+import java.lang.reflect.InvocationTargetException;
+
 import edu.purdue.idsforiot.communication.WifiCommunicator;
 import edu.purdue.idsforiot.communication.ZigBeeCommunicator;
 import edu.purdue.idsforiot.knowledge.KnowledgeBase;
@@ -39,10 +41,10 @@ public class IDS {
 	private String idsNodeId;
 	
 
-	public void start(String source, String tracefile) throws IDSforIoTException {
+	public void start(String source, String tracefile) throws IDSforIoTException, InvocationTargetException {
 		this.start(source, tracefile, true);
 	}
-	public void start(String source, String tracefile, boolean dynamicModuleMgmt) throws IDSforIoTException {
+	public void start(String source, String tracefile, boolean dynamicModuleMgmt) throws IDSforIoTException, InvocationTargetException {
 		this.setIDSNodeId(java.util.UUID.randomUUID().toString());
 		this.dataStore = new DataStore(this);
 		this.kb = new KnowledgeBase(this);

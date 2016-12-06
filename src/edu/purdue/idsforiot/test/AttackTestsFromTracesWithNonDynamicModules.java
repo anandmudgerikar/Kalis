@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -36,7 +37,7 @@ public class AttackTestsFromTracesWithNonDynamicModules {
 	}
 
 	@Test
-	public void testSelectiveForwarding() {
+	public void testSelectiveForwarding() throws InvocationTargetException {
 		String expected = "DETECTED: Selective Forwarding by Entity 0x01 (Module SelectiveForwardingModule) [e]\n"
 				+ "DETECTED: Selective Forwarding by Entity 0x03 (Module SelectiveForwardingModule) [g]\n"
 				+ "DETECTED: Selective Forwarding by Entity 0x03 (Module SelectiveForwardingModule) [h]\n"
@@ -53,7 +54,7 @@ public class AttackTestsFromTracesWithNonDynamicModules {
 
 	
 	@Test
-	public void testICMPReplyFlood() {
+	public void testICMPReplyFlood() throws InvocationTargetException {
 		String expected = "DETECTED: ICMP Flood on 10.0.0.13 by Entity ? (Module ICMPFloodModule) [e]\n"
 				+ "DETECTED: Smurf on 10.0.0.13 by Entity ? (Module SmurfModule) [e]\n";
 
@@ -67,7 +68,7 @@ public class AttackTestsFromTracesWithNonDynamicModules {
 	}
 
 	@Test
-	public void testSmurf() {
+	public void testSmurf() throws InvocationTargetException {
 		String expected = "DETECTED: ICMP Flood on 10.0.0.13 by Entity ? (Module ICMPFloodModule) [i]\n"
 				+ "DETECTED: Smurf on 10.0.0.13 by Entity ? (Module SmurfModule) [i]\n";
 
@@ -81,11 +82,24 @@ public class AttackTestsFromTracesWithNonDynamicModules {
 	}
 
 	@Test
-	public void testTCPSYNFlood() {
+	public void testTCPSYNFlood() throws InvocationTargetException {
 		String expected = "DETECTED: SYN Flood by Entity 10.0.0.12 (Module SYNFloodModule) [e]\n";
 
 		try {
 			this.ids.start("", "data/WifiTCPSYNFlood.txt");
+			assertEquals(expected, errContent.toString());
+		} catch (IDSforIoTException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	@Test
+	public void testZigBeeJamming() throws InvocationTargetException {
+		String expected = "DETECTED: Zigbee Jamming on node 01 (Module ZigBeeJammingModule) [e]\n";
+
+		try {
+			this.ids.start("", "data/ZigBeeJamming.txt");
 			assertEquals(expected, errContent.toString());
 		} catch (IDSforIoTException e) {
 			e.printStackTrace();

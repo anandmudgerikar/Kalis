@@ -1,6 +1,6 @@
 PrintModule
-TopologyDiscoveryModule
-TrafficStatsModule
+//TopologyDiscoveryModule
+//TrafficStatsModule
 // ICMPFloodModule
 // MultiHopSelectiveForwardingModule
 // SYNFloodModule
