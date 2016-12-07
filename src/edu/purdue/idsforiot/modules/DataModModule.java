@@ -9,7 +9,7 @@ import edu.purdue.idsforiot.knowledge.KnowledgeBase;
 import edu.purdue.idsforiot.packets.Packet;
 import edu.purdue.idsforiot.packets.ZigBeePacket;
 
-public class SelectiveForwardingModule extends DetectionModule {
+public class DataModModule extends DetectionModule {
 
 	private Map<String, Queue<Packet>> queues;
 
@@ -22,7 +22,7 @@ public class SelectiveForwardingModule extends DetectionModule {
 	}
 
 
-	public SelectiveForwardingModule(ModuleManager mgr) {
+	public DataModModule(ModuleManager mgr) {
 		super(mgr);
 	}
 
@@ -46,18 +46,21 @@ public class SelectiveForwardingModule extends DetectionModule {
 		Queue<Packet> srcQ = this.getQueueFor(p.getSrc());
 		if (srcQ.isEmpty()){
 			// packet originated from src
-		} else if (srcQ.peek().equals(p)) {
+		} 
+		else
+		{
 			// normal propagation
-			srcQ.poll();
-		} else {
-			// selective forwarding detected!
-			while (true) {
-				Packet head = srcQ.poll();
-				if (head == null || head.equals(p)) break;
-				this.getManager().onDetection(this, "Selective Forwarding", p.getSrc(), head);
+			Packet temp = srcQ.poll();
+			if(!((temp.getData()).equalsIgnoreCase(p.getData()))) //checking for data modification
+			{
+				//data modification detected
+				//while (true) {
+					Packet head = srcQ.poll();
+					//if (head == null || head.equals(p)) break;
+					this.getManager().onDetection(this, "Data Modification", p.getSrc(), head);
+				//}
 			}
-		}
-
+		} 
 		// push packet to queue of dest
 		this.getQueueFor(p.getDst()).offer(p);
 	}

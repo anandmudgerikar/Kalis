@@ -52,6 +52,22 @@ public class AttackTestsFromTracesWithNonDynamicModules {
 		}
 	}
 
+	@Test
+	public void testDataModification() throws InvocationTargetException {
+		String expected = "DETECTED: Data Modification by Entity 0x01 (Module DataModModule) [f]\n"
+				+ "DETECTED: Data Modification by Entity 0x03 (Module DataModModule) [h]\n"
+				+ "DETECTED: Data Modification by Entity 0x01 (Module DataModModule) [m]\n";
+
+		try {
+			this.ids.start("", "data/ZigBeeDataMod.txt");
+			assertEquals(expected, errContent.toString());
+		} catch (IDSforIoTException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+
 	
 	@Test
 	public void testICMPReplyFlood() throws InvocationTargetException {
@@ -96,7 +112,7 @@ public class AttackTestsFromTracesWithNonDynamicModules {
 	
 	@Test
 	public void testZigBeeJamming() throws InvocationTargetException {
-		String expected = "DETECTED: Zigbee Jamming on node 01 (Module ZigBeeJammingModule) [e]\n";
+		String expected = "DETECTED: ZigBee Jamming on 0x01 by Entity ? (Module ZigbeeJammingModule) [h]\n";
 
 		try {
 			this.ids.start("", "data/ZigBeeJamming.txt");
@@ -106,5 +122,4 @@ public class AttackTestsFromTracesWithNonDynamicModules {
 			fail();
 		}
 	}
-
 }
