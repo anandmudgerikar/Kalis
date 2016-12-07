@@ -110,7 +110,7 @@ public class AttackTestsFromTraces {
 	
 	@Test
 	public void testZigBeeJamming() throws InvocationTargetException {
-		String expected = "DETECTED: ZigBee Jamming on 0x01 by Entity ? (Module ZigbeeJammingModule) [h]\n";
+		String expected = "DETECTED: ZigBee Jamming on 0x01 by Entity ? (Module ZigBeeJammingModule) [h]\n";
 
 		try {
 			this.ids.start("", "data/ZigBeeJamming.txt");
