@@ -1,18 +1,140 @@
-"No.","Time","Source","Destination","Protocol","Length","Info"
-"1","0.000000","fe80::1","ff02::1a","ICMPv6","95","RPL Control (DODAG Information Object)"
-"2","8.046366","fe80::1","ff02::1a","ICMPv6","95","RPL Control (DODAG Information Object)"
-"3","8.436810","fe80::ff:fe00:ccbe","ff02::2","ICMPv6","29","Router Solicitation from cc:be:00:00:00:00"
-"4","21.853807","fe80::1","ff02::1a","ICMPv6","95","RPL Control (DODAG Information Object)"
-"5","25.019129","fe80::ff:fe00:ccbe","fe80::1","ICMPv6","54","RPL Control (Destination Advertisement Object)"
-"6","32.203320","fe80::ff:fe00:ccbe","ff02::1a","ICMPv6","57","RPL Control (DODAG Information Object)"
-"7","40.284163","fe80::ff:fe00:ccbe","fe80::1","ICMPv6","54","RPL Control (Destination Advertisement Object)"
-"8","49.859111","fe80::1","ff02::1a","ICMPv6","95","RPL Control (DODAG Information Object)"
-"9","53.077612","fe80::ff:fe00:ccbe","fe80::1","ICMPv6","54","RPL Control (Destination Advertisement Object)"
-"10","64.449376","fe80::ff:fe00:ccbe","ff02::1a","ICMPv6","57","RPL Control (DODAG Information Object)"
-"11","68.338379","fe80::ff:fe00:ccbe","fe80::1","ICMPv6","54","RPL Control (Destination Advertisement Object)"
-"12","83.605061","fe80::ff:fe00:ccbe","fe80::1","ICMPv6","54","RPL Control (Destination Advertisement Object)"
-"13","91.373504","fe80::1","ff02::1a","ICMPv6","95","RPL Control (DODAG Information Object)"
-"14","94.590052","fe80::ff:fe00:ccbe","fe80::1","ICMPv6","54","RPL Control (Destination Advertisement Object)"
-"15","102.723664","fe80::ff:fe00:ccbe","ff02::1a","ICMPv6","57","RPL Control (DODAG Information Object)"
-"16","109.854956","fe80::ff:fe00:ccbe","fe80::1","ICMPv6","54","RPL Control (Destination Advertisement Object)"
-"17","125.118341","fe80::ff:fe00:ccbe","fe80::1","ICMPv6","54","RPL Control (Destination Advertisement Object)"
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+WiFi,1425113435.0284,fe80::1,ff02::1a,1,RPL,DIO
+WiFi,1425113443.07477,fe80::1,ff02::1a,1,RPL,DIO
+WiFi,1425113443.46521,fe80::ff:fe00:ccbe,ff02::2,1,RPL,DIS
+WiFi,1425113456.88221,fe80::1,ff02::1a,1,RPL,DIO
+Wifi,1425113460.04753,fe80::ff:fe00:ccbe,fe80::1,1,RPL,DAO
+Wifi,1425113467.23172,fe80::ff:fe00:ccbe,ff02::1a,1,RPL,DIO
+Wifi,1425113475.31256,fe80::ff:fe00:ccbe,fe80::1,1,RPL,DAO
+WiFi,1425113484.88751,fe80::ff:fe00:aabe,ff02::2,1,RPL,DIS
+Wifi,1425113488.10601,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,1,RPL,DAO
+Wifi,1425113499.47778,fe80::1,ff02::1a,1,RPL,DIO
+Wifi,1425113503.36678,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,1,RPL,DAO
+Wifi,1425113518.63346,fe80::ff:fe00:ccbe,ff02::1a,1,RPL,DIO
+Wifi,1425113526.4019,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,1,RPL,DAO
+Wifi,1425113529.61845,fe80::1,ff02::1a,1,RPL,DIO
+Wifi,1425113537.75206,fe80::ff:fe00:ccbe,ff02::1a,1,RPL,DIO
+WiFi,1425113544.88336,10.0.0.1,ff02::2,a,UDP,response1
+WiFi,1425113560.14674,ff02::2,fe80::ff:fe00:ccbe,a,UDP,response1
+WiFi,1425113435.0284,fe80::ff:fe00:ccbe,fe80::ff:fe00:aabe,a,UDP,response1
+WiFi,1425113443.07477,10.0.0.1,ff02::2,a,UDP,response2
+WiFi,1425113443.46521,ff02::2,fe80::ff:fe00:ccbe,a,UDP,response2
+WiFi,1425113456.88221,fe80::ff:fe00:ccbe,fe80::ff:fe00:aabe,a,UDP,response2
+,,,,,,
+//Data Integrity Attack, data attack, second malicious leaf node  (not authenticated) misbehaving (fe80::ff:fe00:ccbf), directing traffic through itself,,,
+WiFi,1425113435.0284,fe80::1,ff02::1a,0,RPL,DIO
+WiFi,1425113443.07477,fe80::1,ff02::1a,0,RPL,DIO
+WiFi,1425113443.46521,fe80::ff:fe00:ccbe,ff02::2,0,RPL,DIS
+WiFi,1425113456.88221,fe80::1,ff02::1a,0,RPL,DIO
+Wifi,1425113460.04753,fe80::ff:fe00:ccbe,fe80::1,0,RPL,DAO
+Wifi,1425113467.23172,fe80::ff:fe00:ccbe,ff02::1a,0,RPL,DIO
+Wifi,1425113475.31256,fe80::ff:fe00:ccbe,fe80::1,0,RPL,DAO
+WiFi,1425113484.88751,fe80::ff:fe00:aabe,ff02::2,0,RPL,DIS
+WiFi,1425113488.10601,fe80::ff:fe00:ccbf,ff02::2,0,RPL,DIS
+Wifi,1425113499.47778,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,0,RPL,DAO
+Wifi,1425113503.36678,fe80::ff:fe00:ccbf,fe80::ff:fe00:ccbe,0,RPL,DAO
+Wifi,1425113518.63346,fe80::1,ff02::1a,0,RPL,DIO
+Wifi,1425113526.4019,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,0,RPL,DAO
+Wifi,1425113529.61845,fe80::ff:fe00:ccbe,ff02::1a,0,RPL,DIO
+Wifi,1425113537.75206,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,0,RPL,DAO
+Wifi,1425113544.88336,fe80::1,ff02::1a,0,RPL,DIO
+Wifi,1425113560.14674,fe80::ff:fe00:ccbe,ff02::1a,0,RPL,DIO
+,,,,,,
+,,,,,,
+//Replay Attack,,,,,,
+WiFi,1425113435.0284,fe80::1,ff02::1a,0,RPL,DIO
+WiFi,1425113443.07477,fe80::1,ff02::1a,0,RPL,DIO
+WiFi,1425113443.46521,fe80::ff:fe00:ccbe,ff02::2,0,RPL,DIS
+WiFi,1425113456.88221,fe80::1,ff02::1a,0,RPL,DIO
+Wifi,1425113460.04753,fe80::ff:fe00:ccbe,fe80::1,0,RPL,DAO
+Wifi,1425113467.23172,fe80::ff:fe00:ccbe,ff02::1a,0,RPL,DIO
+Wifi,1425113475.31256,fe80::ff:fe00:ccbe,fe80::1,0,RPL,DAO
+WiFi,1425113484.88751,fe80::ff:fe00:aabe,ff02::2,0,RPL,DIS
+Wifi,1425113488.10601,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,0,RPL,DAO
+Wifi,1425113499.47778,fe80::1,ff02::1a,0,RPL,DIO
+Wifi,1425113503.36678,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,0,RPL,DAO
+Wifi,1425113518.63346,fe80::ff:fe00:ccbe,ff02::1a,0,RPL,DIO
+Wifi,1425113526.4019,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,0,RPL,DAO
+Wifi,1425113529.61845,fe80::1,ff02::1a,0,RPL,DIO
+Wifi,1425113537.75206,fe80::ff:fe00:ccbe,ff02::1a,0,RPL,DIO
+WiFi,1425113544.88336,10.0.0.1,ff02::2,a,UDP,response1
+WiFi,1425113560.14674,ff02::2,fe80::ff:fe00:ccbe,a,UDP,response1
+WiFi,1425113435.0284,fe80::ff:fe00:ccbe,fe80::ff:fe00:aabe,a,UDP,response1
+WiFi,1425113443.07477,10.0.0.1,ff02::2,a,UDP,response2
+WiFi,1425113443.46521,ff02::2,fe80::ff:fe00:ccbe,a,UDP,response2
+WiFi,1425113456.88221,fe80::ff:fe00:ccbe,fe80::ff:fe00:aabe,a,UDP,response2
+//replay attack when main router is off but being replayed,,,,,,
+WiFi,1426113456.88221,fe80::ff:fe00:ccbe,ff02::2,0,RPL,DIS
+,,,,,,
+//Delayed Response Attack (false positive/ genuine delays),,,,,,
+WiFi,1425113435.0284,fe80::1,ff02::1a,1,RPL,DIO
+WiFi,1425113443.07477,fe80::1,ff02::1a,1,RPL,DIO
+WiFi,1425113443.46521,fe80::ff:fe00:ccbe,ff02::2,1,RPL,DIS
+WiFi,1425113456.88221,fe80::1,ff02::1a,1,RPL,DIO
+Wifi,1425113460.04753,fe80::ff:fe00:ccbe,ff02::1a,1,RPL,DIO
+WiFi,1425113467.23172,fe80::ff:fe00:aabe,ff02::2,1,RPL,DIS
+Wifi,1425113475.31256,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,1,RPL,DAO
+Wifi,1425113484.88751,fe80::1,ff02::1a,1,RPL,DIO
+//delay induced,,,,,,
+Wifi,1425113499.47778,fe80::ff:fe00:ccbe,fe80::1,1,RPL,DAO
+Wifi,1425113503.36678,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,1,RPL,DAO
+Wifi,1425113518.63346,fe80::ff:fe00:ccbe,ff02::1a,1,RPL,DIO
+Wifi,1425113526.4019,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,1,RPL,DAO
+Wifi,1425113529.61845,fe80::1,ff02::1a,1,RPL,DIO
+Wifi,1425113537.75206,fe80::ff:fe00:ccbe,ff02::1a,1,RPL,DIO
+WiFi,1425113544.88336,10.0.0.1,ff02::2,a,UDP,response1
+WiFi,1425113560.14674,ff02::2,fe80::ff:fe00:ccbe,a,UDP,response1
+WiFi,1425113435.0284,fe80::ff:fe00:ccbe,fe80::ff:fe00:aabe,a,UDP,response1
+WiFi,1425113443.07477,10.0.0.1,ff02::2,a,UDP,response2
+WiFi,1425113443.46521,ff02::2,fe80::ff:fe00:ccbe,a,UDP,response2
+WiFi,1425113456.88221,fe80::ff:fe00:ccbe,fe80::ff:fe00:aabe,a,UDP,response2
+,,,,,,
+//Delayed Response Attack (actual attack),,,,,,
+WiFi,1425113435.0284,fe80::1,ff02::1a,0,RPL,DIO
+WiFi,1425113443.07477,fe80::1,ff02::1a,0,RPL,DIO
+WiFi,1425113443.46521,fe80::ff:fe00:ccbe,ff02::2,0,RPL,DIS
+WiFi,1425113456.88221,fe80::1,ff02::1a,0,RPL,DIO
+Wifi,1425113460.04753,fe80::ff:fe00:ccbe,ff02::1a,0,RPL,DIO
+WiFi,1425113467.23172,fe80::ff:fe00:aabe,ff02::2,0,RPL,DIS
+Wifi,1425113475.31256,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,0,RPL,DAO
+Wifi,1425113484.88751,fe80::1,ff02::1a,0,RPL,DIO
+//delay induced,1425113488.10601,,,,,
+Wifi,1425113499.47778,fe80::ff:fe00:ccbe,fe80::1,0,RPL,DAO
+Wifi,1425113503.36678,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,0,RPL,DAO
+Wifi,1425113518.63346,fe80::ff:fe00:ccbe,ff02::1a,0,RPL,DIO
+Wifi,1425113526.4019,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,0,RPL,DAO
+Wifi,1425113529.61845,fe80::1,ff02::1a,0,RPL,DIO
+Wifi,1425113537.75206,fe80::ff:fe00:ccbe,ff02::1a,0,RPL,DIO
+WiFi,1425113544.88336,10.0.0.1,ff02::2,a,UDP,response1
+WiFi,1425113560.14674,ff02::2,fe80::ff:fe00:ccbe,a,UDP,response1
+WiFi,1425113435.0284,fe80::ff:fe00:ccbe,fe80::ff:fe00:aabe,a,UDP,response1
+WiFi,1425113443.07477,10.0.0.1,ff02::2,a,UDP,response2
+WiFi,1425113443.46521,ff02::2,fe80::ff:fe00:ccbe,a,UDP,response2
+WiFi,1425113456.88221,fe80::ff:fe00:ccbe,fe80::ff:fe00:aabe,a,UDP,response2
+,,,,,,
+,,,,,,
+//Selective Forwarding Attack , not sending DAOs ( fe80::ff:fe00:ccbe not sending ) ,  second router misbehaving (fe80::ff:fe00:ccbe),,,,
+WiFi,1425113435.0284,fe80::1,ff02::1a,1,RPL,DIO
+WiFi,1425113443.07477,fe80::1,ff02::1a,1,RPL,DIO
+WiFi,1425113443.46521,fe80::ff:fe00:ccbe,ff02::2,1,RPL,DIS
+WiFi,1425113456.88221,fe80::1,ff02::1a,1,RPL,DIO
+Wifi,1425113460.04753,fe80::ff:fe00:ccbe,fe80::1,1,RPL,DAO
+Wifi,1425113467.23172,fe80::ff:fe00:ccbe,ff02::1a,1,RPL,DIO
+Wifi,1425113475.31256,fe80::ff:fe00:ccbe,fe80::1,1,RPL,DAO
+WiFi,1425113484.88751,fe80::ff:fe00:aabe,ff02::2,1,RPL,DIS
+Wifi,1425113488.10601,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,1,RPL,DAO
+Wifi,1425113499.47778,fe80::1,ff02::1a,1,RPL,DIO
+//Wifi,1425113503.36678,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,1,RPL,DAO
+Wifi,1425113518.63346,fe80::ff:fe00:ccbe,ff02::1a,1,RPL,DIO
+Wifi,1425113526.4019,fe80::ff:fe00:aabe,fe80::ff:fe00:ccbe,1,RPL,DAO
+Wifi,1425113529.61845,fe80::1,ff02::1a,1,RPL,DIO
+Wifi,1425113537.75206,fe80::ff:fe00:ccbe,ff02::1a,1,RPL,DIO
+WiFi,1425113544.88336,10.0.0.1,ff02::2,a,UDP,response1
+WiFi,1425113560.14674,ff02::2,fe80::ff:fe00:ccbe,a,UDP,response1
+WiFi,1425113435.0284,fe80::ff:fe00:ccbe,fe80::ff:fe00:aabe,a,UDP,response1
+WiFi,1425113443.07477,10.0.0.1,ff02::2,a,UDP,response2
+WiFi,1425113443.46521,ff02::2,fe80::ff:fe00:ccbe,a,UDP,response2
+WiFi,1425113456.88221,fe80::ff:fe00:ccbe,fe80::ff:fe00:aabe,a,UDP,response2
