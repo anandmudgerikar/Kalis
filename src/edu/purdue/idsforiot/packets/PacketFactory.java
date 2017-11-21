@@ -8,7 +8,10 @@ public class PacketFactory {
 		PacketTypes type = PacketTypes.valueOf(parts[0]);
 		switch (type) {
 			case WiFi:
-				return WifiPacket.parseFromLog(raw);
+				if(parts[5].equals("RPL")) //if RPL control packet
+					return RplPacket.parseFromLog(raw);
+				else
+					return WifiPacket.parseFromLog(raw);
 			case ZigBee:
 				return ZigBeePacket.parseFromLog(raw);
 			default:

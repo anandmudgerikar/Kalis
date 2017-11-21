@@ -21,7 +21,10 @@ public class WifiPacket extends Packet {
 	public static WifiPacket parseFromLog(String raw) {
 		String[] parts = raw.split(",", -1);
 		WifiPacket p = new WifiPacket(parts[2], parts[3], parts[4], parts[5], parts[6]);
-		p.setTimestamp(Long.parseLong(parts[1]));
+		if(parts[1].contains(".")) //time not in epoch use double for decimals
+			p.setTimestamp((long) Double.parseDouble(parts[1]));
+		else
+			p.setTimestamp(Long.parseLong(parts[1]));
 		return p;
 	}
 	
