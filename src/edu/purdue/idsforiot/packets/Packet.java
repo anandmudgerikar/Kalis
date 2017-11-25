@@ -96,18 +96,18 @@ public abstract class Packet {
 				return false;
 		} else if (!data.equals(other.data))
 			return false;
-//		if (dst == null) {
-//			if (other.dst != null)
-//				return false;
-//		} else if (!dst.equals(other.dst))
-//			return false;
-//		if (src == null) {
-//			if (other.src != null)
-//				return false;
-//		} else if (!src.equals(other.src))
-//			return false;
-//		if (timestamp != other.timestamp)
-//			return false;
+		if (dst == null) {
+			if (other.dst != null)
+				return false;
+		} else if (!dst.equals(other.dst))
+			return false;
+		if (src == null) {
+			if (other.src != null)
+				return false;
+		} else if (!src.equals(other.src))
+			return false;
+		if (timestamp != other.timestamp)
+			return false;
 		if (type != other.type)
 			return false;
 		return true;

@@ -1,7 +1,12 @@
 PrintModule
 //TopologyDiscoveryModule
 TrafficStatsModule
-// ICMPFloodModule
-// MultiHopSelectiveForwardingModule
-// SYNFloodModule
-//DataModModule
+ICMPFloodModule
+MultiHopSelectiveForwardingModule
+SYNFloodModule
+DataModModule
+SelectiveForwardingModule
+SmurfModule
+ZigBeeJammingModule
+RPLSensingModule
+RPLSelectiveForwardingModule
