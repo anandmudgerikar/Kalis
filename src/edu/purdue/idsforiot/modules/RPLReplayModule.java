@@ -51,8 +51,10 @@ public class RPLReplayModule extends DetectionModule {
 					this.getManager().onDetection(this, "RPL Replay Attack", p.getSrc(),p);
 					
 				}
-
+				else
+				{
 					this.previouspackets.get(p.getSrc()).add(p);
+				}	
 			}
 			else
 			{

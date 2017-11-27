@@ -10,3 +10,8 @@ SmurfModule
 ZigBeeJammingModule
 RPLSensingModule
 RPLSelectiveForwardingModule
+//RPLTimeSensingModule
+//LowerLevelIntegritySensingModule
+RPLIntegrityModule
+RPLDelayModule
+RPLReplayModule

@@ -12,27 +12,28 @@ public class RPLDelayModule extends DetectionModule {
 
 	public RPLDelayModule(ModuleManager mgr) {
 		super(mgr);
+		this.lastDAOts = new HashMap<String, Long>();
 		// TODO Auto-generated constructor stub
 	}
 
 	public void start() {
-		// initializing the queues
-		this.lastDAOts = new HashMap<String, Long>();
+		// initializing the queues		
 		super.start();
 	}
 
 
 
 	public static boolean shouldBeActive(KnowledgeBase kb) {
-		if(kb.getKnowledgeBooleanOrFalse("rplauth"))
+		if(kb.getKnowledgeBooleanOrFalse("rplauth") || kb.getKnowledgeBooleanOrFalse("timesynch"))
+		{
 			return false;
-
+		}	
 		else
 			return true;
 	}
 
 	public static String[] subscribedKnowggets() {
-		return new String[] { "rplauth" };
+		return new String[] { "rplauth", "timesynch" };
 	}
 
 

@@ -34,6 +34,27 @@ public class RPLSensingModule extends SensingModule{
 				//System.out.println("RPL packets are not authenticated");
 			}	
 
+			if(((RplPacket) p).getData().equals("RPL2"))
+			{
+				this.getKnowledgeBase().setKnowledge("lowerrplauth", true);
+				//System.out.println("RPL packets are authenticated");
+			}
+			else
+			{
+				this.getKnowledgeBase().setKnowledge("lowerrplauth", false);
+				//System.out.println("RPL packets are not authenticated");
+			}	
+			
+			if(((RplPacket) p).getData().equals("RPL3"))
+			{
+				this.getKnowledgeBase().setKnowledge("timesynch", true);
+				//System.out.println("RPL packets are authenticated");
+			}
+			else
+			{
+				this.getKnowledgeBase().setKnowledge("timesynch", false);
+				//System.out.println("RPL packets are not authenticated");
+			}	
 		}
 		
 	}

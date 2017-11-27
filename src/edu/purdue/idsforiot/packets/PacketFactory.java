@@ -8,7 +8,7 @@ public class PacketFactory {
 		PacketTypes type = PacketTypes.valueOf(parts[0]);
 		switch (type) {
 			case WiFi:
-				if(parts[5].equals("RPL")) //if RPL control packet
+				if(parts[5].equals("RPL") || parts[5].equals("RPL2") || parts[5].equals("RPL3")) //if RPL control packet
 					return RplPacket.parseFromLog(raw);
 				else
 					return WifiPacket.parseFromLog(raw);

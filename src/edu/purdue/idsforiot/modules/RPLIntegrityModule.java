@@ -24,7 +24,7 @@ public class RPLIntegrityModule extends DetectionModule {
 
 
 	public static boolean shouldBeActive(KnowledgeBase kb) {
-		if(kb.getKnowledgeBooleanOrFalse("rplauth"))
+		if(kb.getKnowledgeBooleanOrFalse("rplauth") || kb.getKnowledgeBooleanOrFalse("lowerrplauth"))
 			return false;
 
 		else
@@ -32,7 +32,7 @@ public class RPLIntegrityModule extends DetectionModule {
 	}
 
 	public static String[] subscribedKnowggets() {
-		return new String[] { "rplauth" };
+		return new String[] { "rplauth", "lowerrplauth" };
 	}
 
 
